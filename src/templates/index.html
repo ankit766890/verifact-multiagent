@@ -3,860 +3,668 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VeriFact | Autonomous Multi-Agent Intelligence Engine</title>
-  <meta name="description" content="International-grade Multi-Agent Autonomous Research & Fact-Checking Platform">
-
-  <!-- Syne, Plus Jakarta Sans & JetBrains Mono Fonts for ultra-premium look -->
+  <title>VeriFact | Multi-Agent Fact Verification Platform</title>
+  <meta name="description" content="An academic and enterprise fact-checking system utilizing multi-agent architecture and Bayesian verification.">
+  
+  <!-- System & Academic Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #030712;
-      --bg-card: rgba(15, 23, 42, 0.7);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(56, 189, 248, 0.3);
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
       
-      --text: #f9fafb;
-      --text-muted: #94a3b8;
-      --text-dim: #475569;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
       
-      --cyan: #06b6d4;
-      --cyan-glow: rgba(6, 182, 212, 0.4);
-      --blue: #3b82f6;
-      --purple: #8b5cf6;
-      --green: #10b981;
-      --red: #f43f5e;
-      --amber: #f59e0b;
+      --brand: #1e3a8a; /* Deep Navy */
+      --brand-hover: #1e40af;
+      --brand-light: #eff6ff;
       
-      --font-display: 'Syne', sans-serif;
-      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --success-text: #166534;
+      
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
+      --danger-text: #991b1b;
+      
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #92400e;
+
+      --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--bg);
+      background-color: var(--bg);
       color: var(--text);
-      font-family: var(--font-body);
+      font-family: var(--font);
+      line-height: 1.5;
       min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Ambient dynamic glow background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -20%;
-      left: 20%;
-      width: 60vw;
-      height: 60vw;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(139, 92, 246, 0.06) 40%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      bottom: -10%;
-      right: 10%;
-      width: 50vw;
-      height: 50vw;
-      background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Top Cyber Navigation Bar */
-    .nav-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(3, 7, 18, 0.75);
+    /* Academic / Institutional Top Header */
+    header.site-header {
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 2rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .brand-wrap {
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 1rem;
     }
 
-    .brand-symbol {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #06b6d4, #3b82f6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 20px var(--cyan-glow);
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .brand-text {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 40%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .badge-live {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
+    .app-title {
+      font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      color: var(--brand);
+      letter-spacing: -0.01em;
     }
 
-    .badge-live::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
+    .badge-institutional {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      background: var(--brand-light);
+      color: var(--brand);
+      border: 1px solid #bfdbfe;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .nav-tools {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.75rem;
     }
 
-    .cyber-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border);
+    .btn-tool {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
       color: var(--text-muted);
-      padding: 0.45rem 0.9rem;
-      border-radius: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      transition: all 0.2s;
+      gap: 0.35rem;
     }
-    .cyber-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--border-glow);
-      color: #fff;
+    .btn-tool:hover {
+      background: var(--bg);
+      color: var(--text);
     }
 
     /* Main Container */
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem;
+    main.container {
+      max-width: 1080px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      flex: 1;
     }
 
-    /* Hero Section */
-    .hero {
-      text-align: center;
-      margin-bottom: 3rem;
+    .page-intro {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
     }
 
-    .hero-pre {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
+    .page-intro h1 {
+      font-size: 1.85rem;
       font-weight: 700;
-      color: var(--cyan);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 0.75rem;
-      display: inline-block;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
     }
 
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: 3.5rem;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 70%, #64748b 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-sub {
+    .page-intro p {
       color: var(--text-muted);
-      font-size: 1.15rem;
-      max-width: 720px;
-      margin: 0 auto;
-      line-height: 1.6;
+      font-size: 1rem;
+      max-width: 760px;
     }
 
-    /* 4-Agent Autonomous Swarm Cards */
-    .agent-matrix {
+    /* Formal Multi-Agent Architecture Bar */
+    .architecture-matrix {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
     }
 
-    .agent-slot {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .agent-card {
+      background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
+      border-radius: 6px;
+      padding: 1rem;
       position: relative;
-      overflow: hidden;
-      transition: all 0.25s ease;
     }
 
-    .agent-slot::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
+    .agent-card.active {
+      border-left: 4px solid var(--brand);
+    }
+
+    .agent-id {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .agent-heading {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .agent-description {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Mode Selection Tabs */
+    .mode-tab-group {
+      display: flex;
+      border-bottom: 1px solid var(--border-dark);
+      margin-bottom: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .mode-tab {
       background: transparent;
-      transition: background 0.25s;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: -1px;
     }
 
-    .agent-slot.active {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(15, 23, 42, 0.9);
-      box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
+    .mode-tab:hover {
+      color: var(--brand);
     }
 
-    .agent-slot.active::before {
-      background: linear-gradient(90deg, var(--cyan), var(--blue));
+    .mode-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
     }
 
-    .slot-meta {
+    /* Inquiry Input Section */
+    .input-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .form-group-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.5rem;
     }
 
-    .slot-tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 800;
-      color: var(--cyan);
-      letter-spacing: 0.05em;
-    }
-
-    .agent-indicator {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--text-dim);
-    }
-    .agent-slot.active .agent-indicator {
-      background: var(--cyan);
-      box-shadow: 0 0 10px var(--cyan);
-    }
-
-    .agent-name {
-      font-size: 1.05rem;
-      font-weight: 750;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.35rem;
-    }
-
-    .agent-desc {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    /* Mode Selector Controller */
-    .controller-bar {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .ctrl-pill {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 0.5rem 1.1rem;
-      border-radius: 10px;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
+    label.section-label {
+      font-size: 0.92rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--text);
     }
 
-    .ctrl-pill:hover {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .ctrl-pill.active {
-      background: rgba(6, 182, 212, 0.15);
-      border-color: var(--cyan);
-      color: #fff;
-      box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-    }
-
-    /* Main Console Card */
-    .console-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.75rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    .console-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.85rem;
-    }
-
-    .console-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .terminal-counter {
-      font-family: var(--font-mono);
+    .char-metric {
+      font-family: var(--mono);
       font-size: 0.75rem;
-      color: var(--text-dim);
+      color: var(--text-light);
     }
 
-    textarea {
+    textarea.statement-box {
       width: 100%;
-      min-height: 120px;
-      background: rgba(3, 7, 18, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      color: #fff;
-      font-family: var(--font-body);
-      font-size: 1.05rem;
-      line-height: 1.6;
+      min-height: 110px;
+      border: 1px solid var(--border-dark);
+      border-radius: 4px;
+      padding: 0.85rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
       resize: vertical;
-      transition: all 0.2s;
+      line-height: 1.5;
     }
 
-    textarea:focus {
-      outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+    textarea.statement-box:focus {
+      outline: 2px solid var(--brand);
+      outline-offset: -1px;
     }
 
-    .action-panel {
+    .form-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 1.25rem;
+      margin-top: 1rem;
       flex-wrap: wrap;
       gap: 1rem;
     }
 
-    .sample-strip {
+    .benchmark-presets {
       display: flex;
       align-items: center;
+      gap: 0.4rem;
       flex-wrap: wrap;
-      gap: 0.5rem;
     }
 
-    .sample-chip {
-      background: rgba(255, 255, 255, 0.04);
+    .preset-chip {
+      background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 0.35rem 0.75rem;
-      border-radius: 7px;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
       font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.15s;
-    }
-    .sample-chip:hover {
-      background: rgba(6, 182, 212, 0.1);
-      border-color: var(--cyan);
-      color: #fff;
     }
 
-    .btn-investigate {
-      background: linear-gradient(135deg, #06b6d4, #2563eb);
-      color: #fff;
+    .preset-chip:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .btn-execute {
+      background: var(--brand);
+      color: #ffffff;
       border: none;
-      padding: 0.8rem 2rem;
-      font-family: var(--font-mono);
-      font-size: 0.95rem;
-      font-weight: 700;
-      border-radius: 10px;
+      padding: 0.65rem 1.4rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
-      box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
-      transition: all 0.2s;
-    }
-    .btn-investigate:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 35px rgba(6, 182, 212, 0.5);
-    }
-    .btn-investigate:active { transform: translateY(0); }
-
-    /* Live Agent Stream Console */
-    #streamConsole {
-      display: none;
-      background: #020617;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 2rem;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-    }
-
-    .stream-header {
-      color: var(--cyan);
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .stream-logs {
-      display: flex;
-      flex-direction: column;
       gap: 0.4rem;
     }
 
-    .log-line {
-      display: flex;
-      gap: 0.75rem;
+    .btn-execute:hover {
+      background: var(--brand-hover);
+    }
+
+    .btn-execute:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Execution Log Audit */
+    #executionLogPanel {
+      display: none;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .log-entry {
+      margin-bottom: 0.3rem;
       color: var(--text-muted);
     }
+    .log-agent { font-weight: 600; color: var(--brand); }
 
-    .log-time { color: var(--text-dim); }
-    .log-agent { color: var(--cyan); font-weight: 700; min-width: 140px; }
-    .log-msg { color: #f1f5f9; }
-
-    /* Results Dossier Presentation */
+    /* Dossier Results Section */
     #resultsDossier {
       display: none;
-      animation: slideUp 0.35s ease;
     }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dossier-board {
-      background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    .dossier-container {
+      background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 6px;
       padding: 2rem;
       margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    .verdict-banner-futuristic {
+    .verdict-header-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.75rem 2rem;
-      border-radius: 14px;
       margin-bottom: 2rem;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid transparent;
     }
 
-    .verdict-banner-futuristic.true {
-      background: radial-gradient(circle at 10% 50%, rgba(16, 185, 129, 0.25) 0%, rgba(15, 23, 42, 0.8) 100%);
-      border-color: rgba(16, 185, 129, 0.4);
+    .verdict-header-box.true {
+      background: var(--success-bg);
+      border-color: var(--success-border);
     }
-    .verdict-banner-futuristic.false {
-      background: radial-gradient(circle at 10% 50%, rgba(244, 63, 94, 0.25) 0%, rgba(15, 23, 42, 0.8) 100%);
-      border-color: rgba(244, 63, 94, 0.4);
+    .verdict-header-box.false {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
     }
-    .verdict-banner-futuristic.misleading {
-      background: radial-gradient(circle at 10% 50%, rgba(245, 158, 11, 0.25) 0%, rgba(15, 23, 42, 0.8) 100%);
-      border-color: rgba(245, 158, 11, 0.4);
+    .verdict-header-box.misleading {
+      background: var(--warning-bg);
+      border-color: var(--warning-border);
     }
 
-    .verdict-label-large {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 800;
+    .verdict-status {
+      font-size: 1.4rem;
+      font-weight: 700;
       letter-spacing: -0.01em;
     }
-    .verdict-banner-futuristic.true .verdict-label-large { color: var(--green); text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-    .verdict-banner-futuristic.false .verdict-label-large { color: var(--red); text-shadow: 0 0 20px rgba(244, 63, 94, 0.5); }
-    .verdict-banner-futuristic.misleading .verdict-label-large { color: var(--amber); text-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+    .verdict-header-box.true .verdict-status { color: var(--success-text); }
+    .verdict-header-box.false .verdict-status { color: var(--danger-text); }
+    .verdict-header-box.misleading .verdict-status { color: var(--warning-text); }
 
-    .verdict-summary-text {
+    .verdict-memo {
+      margin-top: 0.4rem;
+      font-size: 0.95rem;
       color: var(--text);
-      font-size: 1.05rem;
-      margin-top: 0.5rem;
-      max-width: 700px;
-      line-height: 1.5;
+      max-width: 720px;
     }
 
-    .dial-card {
+    .confidence-summary {
       text-align: right;
     }
 
-    .dial-number {
-      font-family: var(--font-mono);
-      font-size: 2.8rem;
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .dial-label {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+    .confidence-metric {
+      font-family: var(--mono);
+      font-size: 2.2rem;
       font-weight: 700;
-      color: var(--text-dim);
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .confidence-label {
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-top: 0.35rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-top: 0.25rem;
     }
 
-    /* Propositions Section */
-    .section-headline {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .propositions-flow {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
+    /* Atomic Propositions List */
+    .propositions-wrapper {
       margin-bottom: 2rem;
     }
 
-    .prop-card-cyber {
-      background: rgba(3, 7, 18, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-    .prop-card-cyber:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .prop-heading {
-      font-size: 1.1rem;
+    .section-title {
+      font-size: 1.15rem;
       font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--text);
     }
 
-    .badge-bar {
+    .proposition-item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      background: #ffffff;
+    }
+
+    .prop-text {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .prop-meta-bar {
       display: flex;
       gap: 0.5rem;
+      margin-bottom: 0.75rem;
       flex-wrap: wrap;
-      margin-bottom: 1rem;
     }
 
-    .cyber-tag {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
+    .meta-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text-muted);
     }
-    .cyber-tag.highlight {
-      background: rgba(6, 182, 212, 0.12);
-      border-color: rgba(6, 182, 212, 0.3);
-      color: var(--cyan);
+
+    .meta-tag.brand {
+      background: var(--brand-light);
+      border-color: #bfdbfe;
+      color: var(--brand);
     }
 
-    .fallacy-callout {
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px dashed rgba(245, 158, 11, 0.4);
-      border-radius: 10px;
-      padding: 0.85rem 1.15rem;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      color: #fde047;
+    .fallacy-warning-box {
+      background: var(--warning-bg);
+      border-left: 4px solid #f59e0b;
+      padding: 0.75rem 1rem;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.88rem;
+      margin: 0.75rem 0;
+      color: #78350f;
     }
 
-    .evidence-deck {
+    .sources-container {
       margin-top: 1rem;
       border-top: 1px solid var(--border);
-      padding-top: 1rem;
+      padding-top: 0.75rem;
     }
 
-    .source-entry {
-      margin-top: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    .source-record {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
     }
 
-    .source-link-cyber {
-      color: var(--cyan);
-      text-decoration: none;
+    .source-record a {
+      color: var(--brand);
+      text-decoration: underline;
       font-weight: 600;
-      font-size: 0.9rem;
     }
-    .source-link-cyber:hover { text-decoration: underline; }
 
-    /* Telemetry Grid */
-    .telemetry-cyber-table {
+    /* Telemetry Table */
+    .telemetry-table-formal {
       width: 100%;
       border-collapse: collapse;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
+      font-family: var(--mono);
       margin-top: 1rem;
     }
 
-    .telemetry-cyber-table th, .telemetry-cyber-table td {
+    .telemetry-table-formal th, .telemetry-table-formal td {
       border: 1px solid var(--border);
-      padding: 0.65rem 1rem;
+      padding: 0.6rem 0.8rem;
       text-align: left;
     }
 
-    .telemetry-cyber-table th {
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--text-dim);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.05em;
+    .telemetry-table-formal th {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
-    .dossier-footer {
+    .dossier-export-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 2rem;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--border);
     }
 
-    @media (max-width: 850px) {
-      .hero-title { font-size: 2.4rem; }
-      .agent-matrix { grid-template-columns: 1fr; }
-      .verdict-banner-futuristic { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-      .dial-card { text-align: left; }
+    footer.site-footer {
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .architecture-matrix { grid-template-columns: 1fr; }
+      .verdict-header-box { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .confidence-summary { text-align: left; }
     }
   </style>
 </head>
 <body>
-  <!-- Global Top Bar -->
-  <nav class="nav-bar">
-    <div class="brand-wrap">
-      <div class="brand-symbol">V</div>
-      <div class="brand-text">VERIFACT</div>
-      <span class="badge-live">AUTONOMOUS SWARM ACTIVE</span>
+  <!-- Header Bar -->
+  <header class="site-header">
+    <div class="header-left">
+      <span class="app-title">VeriFact Research Intelligence</span>
+      <span class="badge-institutional">Track PS03: Multi-Agent Fact-Checking</span>
     </div>
-    <div class="nav-tools">
-      <button class="cyber-btn" onclick="readAloud()">
-        <span>🔊</span> Listen
+    <div class="header-right">
+      <button class="btn-tool" onclick="readAloud()">
+        <span>🔊</span> Audio Brief
       </button>
-      <button class="cyber-btn" onclick="window.print()">
-        <span>🖶</span> Print Audit
+      <button class="btn-tool" onclick="window.print()">
+        <span>🖶</span> Print Report
       </button>
-      <button class="cyber-btn" onclick="exportJSON()">
+      <button class="btn-tool" onclick="exportJSON()">
         <span>&darr;</span> Export JSON
       </button>
     </div>
-  </nav>
+  </header>
 
   <main class="container">
-    <!-- Hero Section -->
-    <section class="hero">
-      <span class="hero-pre">Decentralized Multi-Agent Fact Verification System</span>
-      <h1 class="hero-title">Zero-Trust Cognitive Research</h1>
-      <p class="hero-sub">Four autonomous cognitive agents orchestrating proposition decomposition, verified registry queries, and adversarial red-teaming.</p>
+    <!-- Academic Overview -->
+    <section class="page-intro">
+      <h1>Autonomous Multi-Agent Fact Verification Platform</h1>
+      <p>
+        A deterministic, multi-agent cognitive architecture designed for decomposing compound discourse, 
+        evaluating certified authority domain trust, and conducting adversarial red-team scrutiny against formal and informal logical fallacies.
+      </p>
     </section>
 
-    <!-- Execution Mode Segmented Selector -->
-    <div class="controller-bar" role="tablist">
-      <button type="button" class="ctrl-pill active" id="btnPipeline" onclick="setMode('PIPELINE')">
-        ⚡ 4-Agent Autonomous Swarm
+    <!-- Execution Mode Selector -->
+    <div class="mode-tab-group" role="tablist">
+      <button type="button" class="mode-tab active" id="tabPipeline" onclick="setMode('PIPELINE')">
+        Full 4-Agent Pipeline
       </button>
-      <button type="button" class="ctrl-pill" id="btnPlanner" onclick="setMode('PLANNER')">
-        🔍 Agent 1: Lead Planner
+      <button type="button" class="mode-tab" id="tabPlanner" onclick="setMode('PLANNER')">
+        Agent 1: Lead Planner
       </button>
-      <button type="button" class="ctrl-pill" id="btnEvidence" onclick="setMode('EVIDENCE')">
-        📚 Agent 2: Evidence Hub
+      <button type="button" class="mode-tab" id="tabEvidence" onclick="setMode('EVIDENCE')">
+        Agent 2: Evidence Hub
       </button>
-      <button type="button" class="ctrl-pill" id="btnRedteam" onclick="setMode('REDTEAM')">
-        🛡️ Agent 3: Red-Team Verifier
+      <button type="button" class="mode-tab" id="tabRedteam" onclick="setMode('REDTEAM')">
+        Agent 3: Red-Team Verifier
       </button>
     </div>
 
-    <!-- Active 4-Agent Architecture Matrix -->
-    <div class="agent-matrix">
-      <div class="agent-slot active" id="card1">
-        <div class="slot-meta">
-          <span class="slot-tag">AGENT // 01</span>
-          <div class="agent-indicator"></div>
-        </div>
-        <div class="agent-name">Lead Planner</div>
-        <div class="agent-desc">Deconstructs discourse into atomic verifiable propositions with temporal and entity anchoring.</div>
+    <!-- Agent Architecture Breakdown -->
+    <div class="architecture-matrix">
+      <div class="agent-card active" id="cardAgent1">
+        <div class="agent-id">Agent 01</div>
+        <div class="agent-heading">Lead Planner Agent</div>
+        <div class="agent-description">Deconstructs compound discourse into atomic claims with temporal anchors and entity tags.</div>
       </div>
-
-      <div class="agent-slot active" id="card2">
-        <div class="slot-meta">
-          <span class="slot-tag">AGENT // 02</span>
-          <div class="agent-indicator"></div>
-        </div>
-        <div class="agent-name">Evidence Hub</div>
-        <div class="agent-desc">Queries certified governmental, academic & peer-reviewed domain registries with trust scores.</div>
+      <div class="agent-card active" id="cardAgent2">
+        <div class="agent-id">Agent 02</div>
+        <div class="agent-heading">Evidence Hub Agent</div>
+        <div class="agent-description">Cross-references primary governmental (.gov), health (.org/.int), and peer-reviewed registries.</div>
       </div>
-
-      <div class="agent-slot active" id="card3">
-        <div class="slot-meta">
-          <span class="slot-tag">AGENT // 03</span>
-          <div class="agent-indicator"></div>
-        </div>
-        <div class="agent-name">Red-Team Verifier</div>
-        <div class="agent-desc">Adversarially tests claims against 7 informal cognitive fallacies and cherry-picked disinformation tropes.</div>
+      <div class="agent-card active" id="cardAgent3">
+        <div class="agent-id">Agent 03</div>
+        <div class="agent-heading">Red-Team Verifier</div>
+        <div class="agent-description">Conducts adversarial analysis screening for 7 classes of informal logical fallacies and data bias.</div>
       </div>
-
-      <div class="agent-slot active" id="card4">
-        <div class="slot-meta">
-          <span class="slot-tag">AGENT // 04</span>
-          <div class="agent-indicator"></div>
-        </div>
-        <div class="agent-name">Chief Synthesizer</div>
-        <div class="agent-desc">Computes Bayesian confidence calibrations and generates auditable forensic intelligence dossiers.</div>
+      <div class="agent-card active" id="cardAgent4">
+        <div class="agent-id">Agent 04</div>
+        <div class="agent-heading">Chief Synthesizer</div>
+        <div class="agent-description">Performs Bayesian trust weighting and generates structured, audit-ready verification dossiers.</div>
       </div>
     </div>
 
-    <!-- Main Inquiry Console -->
-    <section class="console-card">
+    <!-- Input Section -->
+    <section class="input-section">
       <form id="verifyForm">
-        <div class="console-header">
-          <div class="console-title">
-            <span style="color: var(--cyan);">&#9670;</span> Target Discourse / Premise to Investigate
-          </div>
-          <span class="terminal-counter" id="charCounter">0 / 1500 chars</span>
+        <div class="form-group-header">
+          <label for="statementInput" class="section-label">Target Text / Proposition for Investigation</label>
+          <span class="char-metric" id="charCount">0 / 1500 chars</span>
         </div>
-
         <textarea
           id="statementInput"
+          class="statement-box"
           required
           maxlength="1500"
-          placeholder="Enter a complex claim, news headline, or article excerpt to investigate with the multi-agent pipeline..."
+          placeholder="Input a news excerpt, factual claim, or statement to initiate multi-agent cross-verification..."
           oninput="updateCount(this)"
         ></textarea>
 
-        <div class="action-panel">
-          <div class="sample-strip">
-            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim);">Presets:</span>
-            <button type="button" class="sample-chip" onclick="loadPreset(1)">Apollo Moon Landing</button>
-            <button type="button" class="sample-chip" onclick="loadPreset(2)">Vaccine Misinformation</button>
-            <button type="button" class="sample-chip" onclick="loadPreset(3)">Flat Earth Conspiracy</button>
-            <button type="button" class="sample-chip" onclick="loadPreset(4)">Sensationalist Miracle Cure</button>
+        <div class="form-controls">
+          <div class="benchmark-presets">
+            <span style="font-size: 0.8rem; color: var(--text-light); font-weight: 500;">Presets:</span>
+            <button type="button" class="preset-chip" onclick="loadSample(1)">NASA Apollo Moon Landing</button>
+            <button type="button" class="preset-chip" onclick="loadSample(2)">Vaccines & Public Health</button>
+            <button type="button" class="preset-chip" onclick="loadSample(3)">Planetary Curvature</button>
+            <button type="button" class="preset-chip" onclick="loadSample(4)">Sensationalist Health Claim</button>
           </div>
 
-          <button type="submit" class="btn-investigate" id="submitBtn">
-            <span id="btnText">Initiate Swarm Audit</span>
+          <button type="submit" class="btn-execute" id="submitBtn">
+            <span id="btnText">Execute Multi-Agent Audit</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
         </div>
       </form>
     </section>
 
-    <!-- Real-time Agent Streaming Console -->
-    <section id="streamConsole">
-      <div class="stream-header">
-        <span>⚡</span> LIVE AGENT TELEMETRY STREAM
-      </div>
-      <div class="stream-logs" id="streamLogs"></div>
+    <!-- Execution Log Audit -->
+    <section id="executionLogPanel">
+      <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">Agent Telemetry Dispatch:</div>
+      <div id="executionLogs"></div>
     </section>
 
-    <!-- Results Intelligence Dossier -->
+    <!-- Research Dossier -->
     <section id="resultsDossier">
-      <div class="dossier-board">
+      <div class="dossier-container">
         <!-- Verdict Banner -->
-        <div class="verdict-banner-futuristic" id="verdictBanner">
+        <div class="verdict-header-box" id="verdictBox">
           <div>
-            <div class="verdict-label-large" id="verdictTitle">VERIFIED TRUE</div>
-            <p class="verdict-summary-text" id="verdictSummary"></p>
+            <div class="verdict-status" id="verdictTitle">VERDICT PENDING</div>
+            <p class="verdict-memo" id="verdictSummary"></p>
           </div>
-          <div class="dial-card">
-            <div class="dial-number" id="confidenceNumber">94%</div>
-            <div class="dial-label">Bayesian Confidence</div>
+          <div class="confidence-summary">
+            <div class="confidence-metric" id="confidenceVal">--%</div>
+            <div class="confidence-label">Bayesian Confidence</div>
           </div>
         </div>
 
-        <!-- Deconstructed Atomic Propositions -->
-        <div class="section-headline">
-          <span style="color: var(--cyan);">&#9632;</span> Deconstructed Propositions & Adversarial Scrutiny
+        <!-- Propositions -->
+        <div class="propositions-wrapper">
+          <div class="section-title">Deconstructed Propositions & Verification Audit</div>
+          <div id="propositionsContainer"></div>
         </div>
-        <div class="propositions-flow" id="propositionsContainer"></div>
 
-        <!-- Multi-Agent Telemetry Audit Table -->
-        <div class="section-headline" style="margin-top: 2rem;">
-          <span style="color: var(--cyan);">&#9632;</span> Agent Pipeline Telemetry & Audit Trail
-        </div>
-        <table class="telemetry-cyber-table">
+        <!-- Telemetry Table -->
+        <div class="section-title" style="margin-top: 2rem;">Pipeline Execution Metrics</div>
+        <table class="telemetry-table-formal">
           <thead>
             <tr>
-              <th>Agent ID</th>
-              <th>Assigned Role</th>
-              <th>Execution Latency</th>
+              <th>Agent Name</th>
+              <th>Operational Role</th>
+              <th>Duration (ms)</th>
               <th>Items Processed</th>
               <th>Status</th>
             </tr>
@@ -864,209 +672,195 @@
           <tbody id="telemetryTbody"></tbody>
         </table>
 
-        <!-- Dossier Download Footer -->
-        <div class="dossier-footer">
-          <button class="cyber-btn" onclick="exportJSON()">
+        <!-- Dossier Footer -->
+        <div class="dossier-export-footer">
+          <button class="btn-tool" onclick="exportJSON()">
             <span>&darr;</span> Download JSON Dossier
           </button>
-          <button class="cyber-btn" onclick="window.print()">
-            <span>🖶</span> Print Forensic Report
+          <button class="btn-tool" onclick="window.print()">
+            <span>🖶</span> Print Academic Report
           </button>
         </div>
       </div>
     </section>
   </main>
 
+  <footer class="site-footer">
+    VeriFact Multi-Agent Research System &bull; Architectural Submission for Hacktoskill PS03 &bull; Open-Source MIT License
+  </footer>
+
   <script>
     let currentDossier = null;
     let selectedMode = 'PIPELINE';
 
     function updateCount(el) {
-      document.getElementById('charCounter').innerText = `${el.value.length} / 1500 chars`;
+      document.getElementById('charCount').innerText = `${el.value.length} / 1500 chars`;
     }
 
-    const presets = {
+    const samples = {
       1: "NASA Apollo 11 landed humans on the Moon in July 1969 and left laser retroreflectors behind.",
       2: "The 1998 MMR vaccine study claiming a link to autism was retracted by The Lancet due to falsified medical records.",
       3: "The Earth is flat and global space agencies use studio fish-eye lenses to fake curvature.",
       4: "This secret miracle herbal tincture is a 100% cure for cancer that doctors don't want you to know about."
     };
 
-    function loadPreset(idx) {
-      const input = document.getElementById('statementInput');
-      input.value = presets[idx];
-      updateCount(input);
+    function loadSample(idx) {
+      const box = document.getElementById('statementInput');
+      box.value = samples[idx];
+      updateCount(box);
     }
 
     function setMode(mode) {
       selectedMode = mode;
       ['Pipeline', 'Planner', 'Evidence', 'Redteam'].forEach(m => {
-        const btn = document.getElementById(`btn${m}`);
-        if (btn) btn.classList.toggle('active', m.toUpperCase() === mode);
+        const tab = document.getElementById(`tab${m}`);
+        if (tab) tab.classList.toggle('active', m.toUpperCase() === mode);
       });
 
-      document.getElementById('card1').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
-      document.getElementById('card2').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
-      document.getElementById('card3').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
-      document.getElementById('card4').classList.toggle('active', mode === 'PIPELINE');
+      document.getElementById('cardAgent1').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
+      document.getElementById('cardAgent2').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
+      document.getElementById('cardAgent3').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
+      document.getElementById('cardAgent4').classList.toggle('active', mode === 'PIPELINE');
 
       const btnText = document.getElementById('btnText');
       if (mode === 'PLANNER') btnText.innerText = 'Run Lead Planner';
       else if (mode === 'EVIDENCE') btnText.innerText = 'Query Evidence Hub';
       else if (mode === 'REDTEAM') btnText.innerText = 'Run Red-Team Verifier';
-      else btnText.innerText = 'Initiate Swarm Audit';
+      else btnText.innerText = 'Execute Multi-Agent Audit';
     }
 
     function readAloud() {
       if (!currentDossier || !('speechSynthesis' in window)) {
-        alert('Run an investigation first to use speech synthesis!');
+        alert('Run an audit first to use auditory briefing.');
         return;
       }
       window.speechSynthesis.cancel();
-      const txt = `VeriFact multi-agent intelligence report. Overall verdict: ${currentDossier.overall_verdict.replace(/_/g, ' ')}. Confidence score: ${Math.round(currentDossier.overall_confidence * 100)} percent. ${currentDossier.executive_summary}`;
+      const txt = `VeriFact summary. Overall verdict: ${currentDossier.overall_verdict.replace(/_/g, ' ')}. Confidence score: ${Math.round(currentDossier.overall_confidence * 100)} percent. ${currentDossier.executive_summary}`;
       const utterance = new SpeechSynthesisUtterance(txt);
       window.speechSynthesis.speak(utterance);
     }
 
     document.getElementById('verifyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const query = document.getElementById('statementInput').value.trim();
-      if (!query) return;
+      const statement = document.getElementById('statementInput').value.trim();
+      if (!statement) return;
 
       const submitBtn = document.getElementById('submitBtn');
       const btnText = document.getElementById('btnText');
-      const streamConsole = document.getElementById('streamConsole');
-      const streamLogs = document.getElementById('streamLogs');
+      const logPanel = document.getElementById('executionLogPanel');
+      const logContainer = document.getElementById('executionLogs');
 
       submitBtn.disabled = true;
-      btnText.innerText = 'Running Agents...';
+      btnText.innerText = 'Agents Processing...';
 
-      // Show real-time stream console simulation
-      streamLogs.innerHTML = '';
-      streamConsole.style.display = 'block';
-      addLogLine('System', 'Dispatching query to Lead Planner Agent...');
+      logContainer.innerHTML = '';
+      logPanel.style.display = 'block';
+      logContainer.innerHTML += `<div class="log-entry"><span class="log-agent">System:</span> Dispatching task to orchestrator in mode [${selectedMode}]...</div>`;
 
       try {
         const res = await fetch('/api/v1/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ statement: query, mode: selectedMode })
+          body: JSON.stringify({ statement: statement, mode: selectedMode })
         });
 
         if (!res.ok) {
           const err = await res.json();
-          throw new Error(err.detail || 'Analysis pipeline error');
+          throw new Error(err.detail || 'Verification error encountered');
         }
 
         currentDossier = await res.json();
 
-        // Render stream steps if returned
         if (currentDossier.agent_timeline && currentDossier.agent_timeline.length > 0) {
           currentDossier.agent_timeline.forEach(step => {
-            addLogLine(step.agent_name, `${step.action}: ${step.thought_summary}`);
+            logContainer.innerHTML += `<div class="log-entry"><span class="log-agent">${step.agent_name}:</span> ${step.action} &mdash; ${step.thought_summary}</div>`;
           });
         }
 
         renderDossier(currentDossier);
       } catch (err) {
-        addLogLine('Error', err.message);
-        alert('Pipeline Error: ' + err.message);
+        logContainer.innerHTML += `<div class="log-entry" style="color: var(--danger-text);">Execution error: ${err.message}</div>`;
+        alert('Audit Error: ' + err.message);
       } finally {
         submitBtn.disabled = false;
-        btnText.innerText = 'Initiate Swarm Audit';
+        btnText.innerText = 'Execute Multi-Agent Audit';
       }
     });
 
-    function addLogLine(agent, msg) {
-      const logs = document.getElementById('streamLogs');
-      const now = new Date().toISOString().substring(11, 23);
-      const line = document.createElement('div');
-      line.className = 'log-line';
-      line.innerHTML = `
-        <span class="log-time">[${now}]</span>
-        <span class="log-agent">${agent}</span>
-        <span class="log-msg">${msg}</span>
-      `;
-      logs.appendChild(line);
-      logs.scrollTop = logs.scrollHeight;
-    }
-
     function renderDossier(d) {
       const section = document.getElementById('resultsDossier');
-      const banner = document.getElementById('verdictBanner');
+      const box = document.getElementById('verdictBox');
       const title = document.getElementById('verdictTitle');
       const summary = document.getElementById('verdictSummary');
-      const confNum = document.getElementById('confidenceNumber');
-      const propContainer = document.getElementById('propositionsContainer');
-      const telemetryTbody = document.getElementById('telemetryTbody');
+      const confVal = document.getElementById('confidenceVal');
+      const container = document.getElementById('propositionsContainer');
+      const tbody = document.getElementById('telemetryTbody');
 
-      banner.className = 'verdict-banner-futuristic ' + (
+      box.className = 'verdict-header-box ' + (
         d.overall_verdict === 'VERIFIED_TRUE' ? 'true' :
         d.overall_verdict === 'VERIFIED_FALSE' ? 'false' : 'misleading'
       );
 
-      title.innerText = d.overall_verdict.replace(/_/g, ' ') + (d.meta.cache_hit ? ' // CACHED' : '');
+      title.innerText = d.overall_verdict.replace(/_/g, ' ') + (d.meta.cache_hit ? ' (Cached)' : '');
       summary.innerText = d.executive_summary;
-      confNum.innerText = Math.round(d.overall_confidence * 100) + '%';
+      confVal.innerText = Math.round(d.overall_confidence * 100) + '%';
 
-      // Propositions
-      propContainer.innerHTML = '';
+      // Render Propositions
+      container.innerHTML = '';
       d.detailed_claims.forEach((cl, i) => {
-        const card = document.createElement('div');
-        card.className = 'prop-card-cyber';
+        const item = document.createElement('div');
+        item.className = 'proposition-item';
 
-        let fallacyMarkup = '';
+        let fallacyNotice = '';
         if (cl.fallacy_analysis && cl.fallacy_analysis.detected) {
-          fallacyMarkup = `
-            <div class="fallacy-callout">
-              <strong>Adversarial Fallacy Flagged:</strong> ${cl.fallacy_analysis.fallacy_type}
-              <p style="margin-top: 0.25rem;">${cl.fallacy_analysis.explanation}</p>
+          fallacyNotice = `
+            <div class="fallacy-warning-box">
+              <strong>Adversarial Fallacy Identified:</strong> ${cl.fallacy_analysis.fallacy_type}
+              <p style="margin-top: 0.2rem;">${cl.fallacy_analysis.explanation}</p>
             </div>
           `;
         }
 
         let sourcesMarkup = '';
         if (cl.corroborating_evidence && cl.corroborating_evidence.length > 0) {
-          sourcesMarkup = '<div class="evidence-deck"><strong style="font-size: 0.82rem; color: #fff;">Certified Authority Evidence:</strong>';
+          sourcesMarkup = '<div class="sources-container"><strong style="font-size: 0.85rem;">Corroborating Primary Authority Sources:</strong>';
           cl.corroborating_evidence.forEach(s => {
             sourcesMarkup += `
-              <div class="source-entry">
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.35rem;">
-                  <span class="cyber-tag highlight">${s.source_type}</span>
-                  <span class="cyber-tag">Trust Calibration: ${Math.round(s.credibility_score * 100)}%</span>
-                </div>
-                <a href="${s.url}" target="_blank" rel="noopener" class="source-link-cyber">${s.title}</a>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.35rem;">${s.snippet}</p>
+              <div class="source-record">
+                <span class="meta-tag brand">${s.source_type}</span>
+                <span class="meta-tag">Trust Index: ${Math.round(s.credibility_score * 100)}%</span>
+                <a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">${s.snippet}</p>
               </div>
             `;
           });
           sourcesMarkup += '</div>';
         }
 
-        card.innerHTML = `
-          <div class="prop-heading">Proposition #${i + 1}: ${cl.claim_text}</div>
-          <div class="badge-bar">
-            <span class="cyber-tag highlight">${cl.topic_category}</span>
-            <span class="cyber-tag">${cl.epistemic_certainty}</span>
+        item.innerHTML = `
+          <div class="prop-text">Proposition ${i + 1}: ${cl.claim_text}</div>
+          <div class="prop-meta-bar">
+            <span class="meta-tag brand">${cl.topic_category}</span>
+            <span class="meta-tag">Epistemic Status: ${cl.epistemic_certainty}</span>
           </div>
-          ${fallacyMarkup}
+          ${fallacyNotice}
           ${sourcesMarkup}
         `;
-        propContainer.appendChild(card);
+        container.appendChild(item);
       });
 
-      // Telemetry table
-      telemetryTbody.innerHTML = '';
+      // Telemetry
+      tbody.innerHTML = '';
       d.audit_trail.forEach(m => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong style="color: var(--cyan);">${m.agent_name}</strong></td>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${m.agent_name}</strong></td>
           <td>${m.agent_role}</td>
           <td>${m.duration_ms} ms</td>
           <td>${m.items_processed} items</td>
-          <td><span style="color: var(--green);">&#x2714; ${m.status}</span></td>
+          <td>${m.status}</td>
         `;
-        telemetryTbody.appendChild(tr);
+        tbody.appendChild(row);
       });
 
       section.style.display = 'block';
