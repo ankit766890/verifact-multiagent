@@ -3,497 +3,749 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VeriFact | Autonomous Multi-Agent Research & Fact-Checking</title>
-  <meta name="description" content="Production-grade Autonomous Multi-Agent Research & Fact-Checking Engine for Hacktoskill PS03">
-  <meta name="theme-color" content="#090d16">
+  <title>VeriFact | Multi-Agent Research & Fact-Checking Engine</title>
+  <meta name="description" content="Production Multi-Agent Fact-Checking & Deep Research Platform for PS03">
+  
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #090d16;
-      --card-bg: rgba(22, 30, 49, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text: #f1f5f9;
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-elevated: #1a2234;
+      --surface-hover: #222d42;
+      --border: #243049;
+      --border-subtle: #1c263c;
+      
+      --text: #f9fafb;
       --text-muted: #94a3b8;
-      --primary: #38bdf8;
-      --primary-glow: rgba(56, 189, 248, 0.25);
+      --text-dim: #64748b;
+      
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-subtle: rgba(59, 130, 246, 0.12);
+      
       --success: #10b981;
+      --success-subtle: rgba(16, 185, 129, 0.12);
+      
       --danger: #ef4444;
+      --danger-subtle: rgba(239, 68, 68, 0.12);
+      
       --warning: #f59e0b;
-      --focus-ring: #60a5fa;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --warning-subtle: rgba(245, 158, 11, 0.12);
+
+      --focus: #3b82f6;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     [data-theme="light"] {
       --bg: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.9);
-      --card-border: rgba(0, 0, 0, 0.1);
+      --surface: #ffffff;
+      --surface-elevated: #f1f5f9;
+      --surface-hover: #e2e8f0;
+      --border: #cbd5e1;
+      --border-subtle: #e2e8f0;
       --text: #0f172a;
       --text-muted: #475569;
-      --primary: #0284c7;
-      --primary-glow: rgba(2, 132, 199, 0.2);
-      --success: #059669;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --focus-ring: #2563eb;
+      --text-dim: #64748b;
+      --primary-subtle: rgba(59, 130, 246, 0.08);
+      --success-subtle: rgba(16, 185, 129, 0.08);
+      --danger-subtle: rgba(239, 68, 68, 0.08);
+      --warning-subtle: rgba(245, 158, 11, 0.08);
     }
 
-    [data-contrast="high"] {
-      --bg: #000000;
-      --card-bg: #111111;
-      --card-border: #ffffff;
-      --text: #ffffff;
-      --text-muted: #e2e8f0;
-      --primary: #00e5ff;
-      --success: #00ff66;
-      --danger: #ff3333;
-      --warning: #ffcc00;
-      --focus-ring: #ffff00;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
-
-    /* Skip link for screen-reader & keyboard accessibility */
     .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 0;
-      background: var(--primary);
-      color: #000;
-      padding: 8px 16px;
-      z-index: 1000;
-      font-weight: 700;
-      text-decoration: none;
-      border-radius: 0 0 8px 0;
+      position: absolute; top: -50px; left: 16px;
+      background: var(--primary); color: #fff;
+      padding: 10px 18px; font-weight: 700; z-index: 1000;
+      border-radius: 0 0 6px 6px; text-decoration: none;
       transition: top 0.2s;
     }
-    .skip-link:focus { top: 0; outline: 3px solid var(--focus-ring); }
+    .skip-link:focus { top: 0; outline: 3px solid var(--focus); }
 
     body {
-      background: var(--bg);
+      background-color: var(--bg);
       color: var(--text);
+      font-family: var(--font-sans);
       min-height: 100vh;
-      padding: 2.5rem 1rem;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Global Header */
+    .top-nav {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0.85rem 2rem;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      transition: background 0.3s, color 0.3s;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
-    .container { width: 100%; max-width: 980px; }
-
-    /* Accessibility Toolbar */
-    .a11y-toolbar {
+    .brand {
       display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .a11y-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
     }
 
-    .a11y-btn:focus-visible, button:focus-visible, textarea:focus-visible, a:focus-visible {
-      outline: 3px solid var(--focus-ring) !important;
-      outline-offset: 3px !important;
-    }
-
-    header { text-align: center; margin-bottom: 2rem; }
-
-    .badge-top {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
+    .brand-title {
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--primary);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
     }
 
-    h1 {
-      font-size: 2.4rem;
+    .brand-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: var(--primary-subtle);
+      color: var(--primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { background: var(--surface-hover); color: var(--text); }
+    .nav-btn:focus-visible, button:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 2px solid var(--focus) !important;
+      outline-offset: 2px;
+    }
+
+    /* Main Container */
+    .app-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-section h1 {
+      font-size: 2.5rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: 0.5rem;
     }
 
-    header p { color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto; }
-
-    /* Interactive Agent Mode Selector */
-    .mode-bar {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 1.5rem 0 1rem 0;
-      flex-wrap: wrap;
+    .hero-section p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto;
     }
 
-    .mode-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+    /* Mode Selector Segmented Control */
+    .segmented-control {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 10px;
+      max-width: 780px;
+      margin: 2rem auto 1.5rem auto;
+      gap: 4px;
+    }
+
+    .segment-item {
+      flex: 1;
+      background: transparent;
+      border: none;
       color: var(--text-muted);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.6rem 0.5rem;
       font-size: 0.85rem;
       font-weight: 600;
+      border-radius: 7px;
       cursor: pointer;
-      transition: all 0.2s;
+      text-align: center;
+      transition: all 0.15s;
     }
 
-    .mode-btn.active {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: var(--primary);
+    .segment-item:hover { color: var(--text); }
+    .segment-item.active {
+      background: var(--surface-elevated);
       color: var(--text);
-      box-shadow: 0 0 12px var(--primary-glow);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
     }
 
-    /* Pipeline Visualization */
-    .pipeline-bar {
+    /* Agent Architecture Status Bar */
+    .agent-pipeline-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .agent-pill {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0.85rem;
-      text-align: left;
-      transition: all 0.2s ease;
-    }
-
-    .agent-pill.active {
-      border-color: var(--primary);
-      box-shadow: 0 0 15px var(--primary-glow);
-    }
-
-    .agent-pill .step-num {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 0.2rem;
-    }
-
-    .agent-pill .agent-name { font-size: 0.85rem; font-weight: 650; }
-
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1.75rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      gap: 1rem;
       margin-bottom: 2rem;
     }
 
-    label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .agent-card.active {
+      border-color: var(--primary);
+    }
+
+    .agent-card.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 10px 10px 0 0;
+    }
+
+    .agent-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+
+    .agent-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+    .agent-card.active .status-dot {
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+
+    .agent-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .agent-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Main Inquiry Panel */
+    .inquiry-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel-label {
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .char-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
 
     textarea {
       width: 100%;
-      height: 110px;
-      background: rgba(10, 14, 26, 0.4);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
+      min-height: 110px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       color: var(--text);
-      padding: 0.9rem;
-      font-size: 1rem;
+      padding: 0.85rem 1rem;
+      font-size: 0.95rem;
+      font-family: var(--font-sans);
       line-height: 1.5;
       resize: vertical;
-      transition: all 0.2s;
+      transition: border-color 0.15s;
     }
 
-    .btn-row {
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .action-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 1rem;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .btn-submit {
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.75rem;
-      font-size: 0.95rem;
-      font-weight: 650;
-      border-radius: 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: transform 0.15s, opacity 0.15s;
-    }
-
-    .btn-submit:hover { transform: translateY(-1px); opacity: 0.95; }
-
-    .quick-chips {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--primary);
-    }
-
-    .chip:hover { background: rgba(56, 189, 248, 0.15); border-color: var(--primary); }
-
-    /* Results */
-    #resultsPanel { display: none; }
-
-    .verdict-header {
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      border-left: 6px solid transparent;
-    }
-
-    .verdict-true { background: rgba(16, 185, 129, 0.15); border-left-color: var(--success); }
-    .verdict-false { background: rgba(239, 68, 68, 0.15); border-left-color: var(--danger); }
-    .verdict-misleading { background: rgba(245, 158, 11, 0.15); border-left-color: var(--warning); }
-    .verdict-context { background: rgba(56, 189, 248, 0.15); border-left-color: var(--primary); }
-
-    .confidence-gauge { text-align: right; }
-    .confidence-number { font-size: 1.8rem; font-weight: 800; }
-
-    .claim-card {
-      background: rgba(12, 17, 33, 0.3);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .claim-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-
-    .fallacy-box {
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px dashed rgba(245, 158, 11, 0.5);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      margin: 0.75rem 0;
-    }
-
-    .evidence-item {
-      margin-top: 0.75rem;
-      padding: 0.65rem 0.85rem;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-
-    .source-tag {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--primary);
-      margin-right: 0.35rem;
-    }
-
-    .trust-tag {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--success);
-    }
-
-    .telemetry-tray {
-      display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--card-border);
+    }
+
+    .primary-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.15s;
+    }
+    .primary-btn:hover { background: var(--primary-hover); }
+
+    .sample-chips {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
       font-size: 0.8rem;
+    }
+
+    .chip-btn {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      transition: all 0.15s;
+    }
+    .chip-btn:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    /* Results Dossier Presentation */
+    #resultsDossier {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dossier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .verdict-banner-modern {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      border: 1px solid transparent;
+    }
+
+    .verdict-banner-modern.true {
+      background: var(--success-subtle);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .verdict-banner-modern.false {
+      background: var(--danger-subtle);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .verdict-banner-modern.misleading {
+      background: var(--warning-subtle);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .verdict-banner-modern.context {
+      background: var(--primary-subtle);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .verdict-headline {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .verdict-banner-modern.true .verdict-headline { color: var(--success); }
+    .verdict-banner-modern.false .verdict-headline { color: var(--danger); }
+    .verdict-banner-modern.misleading .verdict-headline { color: var(--warning); }
+    .verdict-banner-modern.context .verdict-headline { color: var(--primary); }
+
+    .verdict-explanation {
+      font-size: 0.92rem;
+      color: var(--text);
+      margin-top: 0.3rem;
+    }
+
+    .score-dial {
+      text-align: right;
+    }
+
+    .score-val {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .score-lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    /* Proposition Accordion/Cards */
+    .propositions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .prop-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+
+    .prop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+
+    .prop-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       color: var(--text-muted);
     }
 
-    .actions-bar { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+    .tag.primary { color: var(--primary); border-color: rgba(59, 130, 246, 0.3); }
 
-    .btn-secondary {
-      background: var(--card-bg);
-      color: var(--text);
-      border: 1px solid var(--card-border);
-      padding: 0.5rem 1rem;
+    .fallacy-alert {
+      background: var(--warning-subtle);
+      border-left: 4px solid var(--warning);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
       font-size: 0.85rem;
+      margin: 0.75rem 0;
+      color: var(--text);
+    }
+
+    .sources-tray {
+      margin-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+
+    .source-row {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .source-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .source-link:hover { text-decoration: underline; }
+
+    /* Telemetry Table */
+    .telemetry-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+    }
+
+    .telemetry-table th, .telemetry-table td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+
+    .telemetry-table th {
+      background: var(--surface-elevated);
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .dossier-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .outline-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
       border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 0.4rem;
+      transition: all 0.15s;
+    }
+    .outline-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text);
     }
 
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-
-    /* Visual Telemetry Chart Gauge */
-    .metric-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      font-size: 0.78rem;
-    }
-
-    @media (max-width: 640px) {
-      .pipeline-bar { grid-template-columns: 1fr; }
-      .verdict-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .confidence-gauge { text-align: left; }
+    @media (max-width: 768px) {
+      .agent-pipeline-grid { grid-template-columns: 1fr; }
+      .segmented-control { flex-direction: column; }
+      .verdict-banner-modern { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .score-dial { text-align: left; }
     }
   </style>
 </head>
 <body>
-  <!-- Accessible skip navigation -->
-  <a href="#main-content" class="skip-link">Skip to Main Content</a>
+  <a href="#mainSection" class="skip-link">Skip to main content</a>
 
-  <main class="container" id="main-content" role="main">
-    <!-- Accessibility / Theme Toolbar -->
-    <div class="a11y-toolbar" role="toolbar" aria-label="Accessibility & Display Settings">
-      <button class="a11y-btn" onclick="toggleTheme()" aria-label="Toggle Light/Dark Theme">🌓 Switch Theme</button>
-      <button class="a11y-btn" onclick="toggleContrast()" aria-label="Toggle High Contrast Mode">👁️ High Contrast (AAA)</button>
-      <button class="a11y-btn" onclick="readAloud()" id="ttsBtn" aria-label="Read Results Out Loud">🔊 Read Aloud</button>
+  <!-- Global Header Bar -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-logo" aria-hidden="true">V</div>
+      <div class="brand-title">VeriFact <span style="font-weight: 400; color: var(--text-muted);">Multi-Agent</span></div>
+      <span class="brand-badge">PS03</span>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="toggleTheme()" aria-label="Toggle visual theme">
+        <span>🌓</span> Theme
+      </button>
+      <button class="nav-btn" onclick="readAloud()" aria-label="Auditory read aloud">
+        <span>🔊</span> Listen
+      </button>
+      <button class="nav-btn" onclick="window.print()" aria-label="Print audit report">
+        <span>🖶</span> Print
+      </button>
+    </div>
+  </header>
+
+  <main class="app-layout" id="mainSection">
+    <!-- Hero / Intro -->
+    <section class="hero-section">
+      <h1>Autonomous Multi-Agent Fact Verification</h1>
+      <p>Four specialized cognitive agents orchestrating claim decomposition, primary registry research, and adversarial red-teaming.</p>
+    </section>
+
+    <!-- Agent Mode Segmented Controller -->
+    <div class="segmented-control" role="tablist" aria-label="Agent Execution Control">
+      <button type="button" class="segment-item active" id="modeBtnPipeline" onclick="setMode('PIPELINE')" role="tab" aria-selected="true">
+        Cooperative Pipeline (All 4)
+      </button>
+      <button type="button" class="segment-item" id="modeBtnPlanner" onclick="setMode('PLANNER')" role="tab" aria-selected="false">
+        Agent 1: Planner
+      </button>
+      <button type="button" class="segment-item" id="modeBtnEvidence" onclick="setMode('EVIDENCE')" role="tab" aria-selected="false">
+        Agent 2: Evidence Hub
+      </button>
+      <button type="button" class="segment-item" id="modeBtnRedteam" onclick="setMode('REDTEAM')" role="tab" aria-selected="false">
+        Agent 3: Red-Team
+      </button>
     </div>
 
-    <header>
-      <div class="badge-top">Hacktoskill Competition Track: PS03</div>
-      <h1>VeriFact Multi-Agent Engine</h1>
-      <p>Autonomous research, claim deconstruction, domain trust scoring, and adversarial red-teaming.</p>
-      
-      <!-- Interactive Execution Mode Switcher -->
-      <div class="mode-bar" role="radiogroup" aria-label="Execution Mode Switcher">
-        <button type="button" class="mode-btn active" id="modeBtnPipeline" onclick="setMode('PIPELINE')" role="radio" aria-checked="true">
-          ⚡ Full Pipeline (All 4 Agents)
-        </button>
-        <button type="button" class="mode-btn" id="modeBtnPlanner" onclick="setMode('PLANNER')" role="radio" aria-checked="false">
-          🔍 Agent 1: Lead Planner Only
-        </button>
-        <button type="button" class="mode-btn" id="modeBtnEvidence" onclick="setMode('EVIDENCE')" role="radio" aria-checked="false">
-          📚 Agent 2: Evidence Hub Only
-        </button>
-        <button type="button" class="mode-btn" id="modeBtnRedteam" onclick="setMode('REDTEAM')" role="radio" aria-checked="false">
-          🛡️ Agent 3: Red-Team Only
-        </button>
+    <!-- Active Agents Status Architecture -->
+    <div class="agent-pipeline-grid">
+      <div class="agent-card active" id="cardAgent1">
+        <div class="agent-meta">
+          <span class="agent-num">AGENT-01</span>
+          <div class="status-dot" title="Active"></div>
+        </div>
+        <div class="agent-label">Lead Planner</div>
+        <div class="agent-desc">Deconstructs compound discourse into atomic propositions & temporal anchors.</div>
       </div>
 
-      <!-- Live 4-Agent Pipeline -->
-      <div class="pipeline-bar" aria-label="Agent Execution Architecture">
-        <div class="agent-pill active" id="agent1Pill">
-          <div class="step-num">Agent 01</div>
-          <div class="agent-name">Lead Planner</div>
+      <div class="agent-card active" id="cardAgent2">
+        <div class="agent-meta">
+          <span class="agent-num">AGENT-02</span>
+          <div class="status-dot" title="Active"></div>
         </div>
-        <div class="agent-pill active" id="agent2Pill">
-          <div class="step-num">Agent 02</div>
-          <div class="agent-name">Evidence Hub</div>
-        </div>
-        <div class="agent-pill active" id="agent3Pill">
-          <div class="step-num">Agent 03</div>
-          <div class="agent-name">Red-Team Verifier</div>
-        </div>
-        <div class="agent-pill active" id="agent4Pill">
-          <div class="step-num">Agent 04</div>
-          <div class="agent-name">Chief Synthesizer</div>
-        </div>
+        <div class="agent-label">Evidence Hub</div>
+        <div class="agent-desc">Queries government, academic & peer-reviewed domain registries with trust scoring.</div>
       </div>
-    </header>
 
-    <section class="glass-card" aria-labelledby="querySection">
-      <h2 id="querySection" style="display:none">Query Submission</h2>
+      <div class="agent-card active" id="cardAgent3">
+        <div class="agent-meta">
+          <span class="agent-num">AGENT-03</span>
+          <div class="status-dot" title="Active"></div>
+        </div>
+        <div class="agent-label">Red-Team Verifier</div>
+        <div class="agent-desc">Adversarially tests assertions against 7 informal fallacies and disinformation tropes.</div>
+      </div>
+
+      <div class="agent-card active" id="cardAgent4">
+        <div class="agent-meta">
+          <span class="agent-num">AGENT-04</span>
+          <div class="status-dot" title="Active"></div>
+        </div>
+        <div class="agent-label">Chief Synthesizer</div>
+        <div class="agent-desc">Computes Bayesian confidence ratings and formats structured executive dossiers.</div>
+      </div>
+    </div>
+
+    <!-- Inquiry Input Panel -->
+    <section class="inquiry-panel">
       <form id="verifyForm">
-        <label for="statementInput">Submit Statement, News Headline, or Complex Article to Investigate:</label>
+        <div class="panel-header">
+          <label for="statementInput" class="panel-label">Enter Statement or Article Excerpt</label>
+          <span class="char-count" id="charCounter">0 / 1500 chars</span>
+        </div>
         <textarea
           id="statementInput"
           name="statement"
           required
           aria-required="true"
-          placeholder="e.g. NASA Apollo 11 landed humans on the Moon in July 1969, and vaccines prevent infectious measles."
+          maxlength="1500"
+          placeholder="e.g. NASA Apollo 11 landed humans on the Moon in July 1969, and vaccines prevent infectious viral diseases."
+          oninput="updateCharCount(this)"
         ></textarea>
-        
-        <div class="btn-row">
-          <button type="submit" class="btn-submit" id="submitBtn">
-            <span id="btnText">Investigate Claims</span>
+
+        <div class="action-row">
+          <div class="sample-chips">
+            <span style="color: var(--text-dim); font-weight: 500;">Quick Benchmarks:</span>
+            <button type="button" class="chip-btn" onclick="loadSample(1)">Apollo Moon Landing</button>
+            <button type="button" class="chip-btn" onclick="loadSample(2)">Vaccines & Health</button>
+            <button type="button" class="chip-btn" onclick="loadSample(3)">Flat Earth Theory</button>
+            <button type="button" class="chip-btn" onclick="loadSample(4)">Sensationalist Cure</button>
+          </div>
+
+          <button type="submit" class="primary-btn" id="submitBtn">
+            <span id="btnLabel">Run Multi-Agent Audit</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
-          <span id="pipelineSpinner" style="display:none; color: var(--primary); font-size: 0.9rem;" role="status" aria-live="assertive">
-            Executing multi-agent verification pipeline...
-          </span>
-        </div>
-
-        <div class="quick-chips">
-          <span>Benchmark Queries:</span>
-          <button type="button" class="chip" onclick="loadSample(1)">NASA Apollo Moon Landing</button>
-          <button type="button" class="chip" onclick="loadSample(2)">Vaccines & Medical Science</button>
-          <button type="button" class="chip" onclick="loadSample(3)">Flat Earth Conspiracy</button>
-          <button type="button" class="chip" onclick="loadSample(4)">Sensationalist Miracle Cure</button>
         </div>
       </form>
     </section>
 
-    <!-- Results Intelligence Dossier -->
-    <section id="resultsPanel" class="glass-card" aria-live="polite" aria-atomic="true">
-      <div id="verdictHeader" class="verdict-header">
-        <div>
-          <span id="verdictTitle" style="font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em;">VERDICT</span>
-          <p id="verdictSummary" style="font-size: 0.95rem; margin-top: 0.4rem;"></p>
+    <!-- Results Dossier -->
+    <section id="resultsDossier" aria-live="polite">
+      <div class="dossier-card">
+        <!-- Top Verdict Banner -->
+        <div class="verdict-banner-modern" id="verdictBanner">
+          <div>
+            <div class="verdict-headline" id="verdictTitle">VERDICT PENDING</div>
+            <p class="verdict-explanation" id="verdictSummary"></p>
+          </div>
+          <div class="score-dial">
+            <div class="score-val" id="confidenceVal">--%</div>
+            <div class="score-lbl">Confidence Score</div>
+          </div>
         </div>
-        <div class="confidence-gauge">
-          <div class="confidence-number" id="confidenceVal">95%</div>
-          <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Certainty Index</span>
+
+        <!-- Deconstructed Propositions -->
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Deconstructed Propositions</h3>
+        <div class="propositions-list" id="propositionsContainer"></div>
+
+        <!-- Execution Telemetry -->
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.75rem 0 0.5rem 0;">Agent Execution Telemetry</h3>
+        <table class="telemetry-table" aria-label="Pipeline Telemetry Table">
+          <thead>
+            <tr>
+              <th>Agent Name</th>
+              <th>Latency (ms)</th>
+              <th>Status</th>
+              <th>Items Processed</th>
+            </tr>
+          </thead>
+          <tbody id="telemetryTableBody"></tbody>
+        </table>
+
+        <!-- Dossier Download Actions -->
+        <div class="dossier-actions">
+          <button class="outline-btn" onclick="exportJSON()">
+            <span>&darr;</span> Export JSON Dossier
+          </button>
+          <button class="outline-btn" onclick="window.print()">
+            <span>🖶</span> Print Dossier
+          </button>
         </div>
       </div>
-
-      <div class="actions-bar">
-        <button class="btn-secondary" onclick="exportJSON()" aria-label="Download JSON Dossier">
-          <span>&#x21E9; Download JSON Dossier</span>
-        </button>
-        <button class="btn-secondary" onclick="window.print()" aria-label="Print Formal Audit Report">
-          <span>&#x1F5B6; Print Audit Report</span>
-        </button>
-        <span id="cacheIndicator" class="metric-badge" style="display:none; color: var(--success);" aria-label="Cache Status">
-          ⚡ Sub-millisecond Cache Hit
-        </span>
-      </div>
-
-      <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.15rem;">Agent Findings & Evidence Dossier</h3>
-      <div id="claimsContainer"></div>
-
-      <h4 style="margin: 1.5rem 0 0.5rem 0; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted);">
-        Execution Telemetry & Audit Trail
-      </h4>
-      <div class="telemetry-tray" id="telemetryTray"></div>
     </section>
   </main>
 
@@ -501,15 +753,13 @@
     let currentDossier = null;
     let selectedMode = 'PIPELINE';
 
-    // Theme & Accessibility Toggles
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+    function updateCharCount(el) {
+      document.getElementById('charCounter').innerText = `${el.value.length} / 1500 chars`;
     }
 
-    function toggleContrast() {
-      const current = document.documentElement.getAttribute('data-contrast');
-      document.documentElement.setAttribute('data-contrast', current === 'high' ? 'normal' : 'high');
+    function toggleTheme() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
     }
 
     function readAloud() {
@@ -518,8 +768,8 @@
         return;
       }
       window.speechSynthesis.cancel();
-      const textToSpeak = `Verification report. Overall Verdict: ${currentDossier.overall_verdict.replace('_', ' ')}. Confidence: ${Math.round(currentDossier.overall_confidence * 100)} percent. ${currentDossier.executive_summary}`;
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      const txt = `VeriFact analysis. Overall verdict: ${currentDossier.overall_verdict.replace('_', ' ')}. Confidence: ${Math.round(currentDossier.overall_confidence * 100)} percent. ${currentDossier.executive_summary}`;
+      const utterance = new SpeechSynthesisUtterance(txt);
       window.speechSynthesis.speak(utterance);
     }
 
@@ -531,144 +781,145 @@
     };
 
     function loadSample(num) {
-      document.getElementById('statementInput').value = samples[num];
+      const input = document.getElementById('statementInput');
+      input.value = samples[num];
+      updateCharCount(input);
     }
 
     function setMode(mode) {
       selectedMode = mode;
       ['Pipeline', 'Planner', 'Evidence', 'Redteam'].forEach(m => {
         const btn = document.getElementById(`modeBtn${m}`);
-        if (btn) {
-          const isActive = m.toUpperCase() === mode;
-          btn.classList.toggle('active', isActive);
-          btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
-        }
+        if (btn) btn.classList.toggle('active', m.toUpperCase() === mode);
       });
 
-      document.getElementById('agent1Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
-      document.getElementById('agent2Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
-      document.getElementById('agent3Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
-      document.getElementById('agent4Pill').classList.toggle('active', mode === 'PIPELINE');
+      document.getElementById('cardAgent1').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
+      document.getElementById('cardAgent2').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
+      document.getElementById('cardAgent3').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
+      document.getElementById('cardAgent4').classList.toggle('active', mode === 'PIPELINE');
 
-      const btnText = document.getElementById('btnText');
-      if (mode === 'PLANNER') btnText.innerText = 'Run Planner Agent';
-      else if (mode === 'EVIDENCE') btnText.innerText = 'Run Evidence Hub';
-      else if (mode === 'REDTEAM') btnText.innerText = 'Run Red-Team Verifier';
-      else btnText.innerText = 'Investigate Claims (All 4)';
+      const btnLabel = document.getElementById('btnLabel');
+      if (mode === 'PLANNER') btnLabel.innerText = 'Run Lead Planner';
+      else if (mode === 'EVIDENCE') btnLabel.innerText = 'Query Evidence Hub';
+      else if (mode === 'REDTEAM') btnLabel.innerText = 'Run Red-Team Verifier';
+      else btnLabel.innerText = 'Run Multi-Agent Audit';
     }
 
     document.getElementById('verifyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const query = document.getElementById('statementInput').value.trim();
-      if (!query) return;
+      const statement = document.getElementById('statementInput').value.trim();
+      if (!statement) return;
 
       const submitBtn = document.getElementById('submitBtn');
-      const spinner = document.getElementById('pipelineSpinner');
-      const resultsPanel = document.getElementById('resultsPanel');
-
+      const btnLabel = document.getElementById('btnLabel');
+      const originalText = btnLabel.innerText;
+      
       submitBtn.disabled = true;
-      spinner.style.display = 'inline';
+      btnLabel.innerText = 'Processing Agents...';
 
       try {
         const res = await fetch('/api/v1/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ statement: query, mode: selectedMode })
+          body: JSON.stringify({ statement: statement, mode: selectedMode })
         });
 
         if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.detail || 'Verification error');
+          const err = await res.json();
+          throw new Error(err.detail || 'Analysis error');
         }
 
         currentDossier = await res.json();
-        renderDossier(currentDossier);
+        renderResults(currentDossier);
       } catch (err) {
-        alert('Error: ' + err.message);
+        alert('Verification Failed: ' + err.message);
       } finally {
         submitBtn.disabled = false;
-        spinner.style.display = 'none';
+        btnLabel.innerText = originalText;
       }
     });
 
-    function renderDossier(d) {
-      const resultsPanel = document.getElementById('resultsPanel');
-      const vHeader = document.getElementById('verdictHeader');
+    function renderResults(d) {
+      const dossierSection = document.getElementById('resultsDossier');
+      const banner = document.getElementById('verdictBanner');
       const vTitle = document.getElementById('verdictTitle');
       const vSummary = document.getElementById('verdictSummary');
       const confVal = document.getElementById('confidenceVal');
-      const container = document.getElementById('claimsContainer');
-      const telemetry = document.getElementById('telemetryTray');
-      const cacheIndicator = document.getElementById('cacheIndicator');
+      const propsContainer = document.getElementById('propositionsContainer');
+      const telemetryTbody = document.getElementById('telemetryTableBody');
 
-      vHeader.className = 'verdict-header ' + (
-        d.overall_verdict === 'VERIFIED_TRUE' ? 'verdict-true' :
-        d.overall_verdict === 'VERIFIED_FALSE' ? 'verdict-false' :
-        d.overall_verdict === 'CONTEXT_REQUIRED' ? 'verdict-context' : 'verdict-misleading'
+      // Banner style
+      banner.className = 'verdict-banner-modern ' + (
+        d.overall_verdict === 'VERIFIED_TRUE' ? 'true' :
+        d.overall_verdict === 'VERIFIED_FALSE' ? 'false' :
+        d.overall_verdict === 'CONTEXT_REQUIRED' ? 'context' : 'misleading'
       );
 
-      vTitle.innerText = d.overall_verdict.replace('_', ' ') + ` [Mode: ${d.execution_mode}]`;
+      vTitle.innerText = d.overall_verdict.replace(/_/g, ' ') + (d.meta.cache_hit ? ' (Cached)' : '');
       vSummary.innerText = d.executive_summary;
       confVal.innerText = Math.round(d.overall_confidence * 100) + '%';
 
-      if (d.meta && d.meta.cache_hit) {
-        cacheIndicator.style.display = 'inline-flex';
-      } else {
-        cacheIndicator.style.display = 'none';
-      }
-
-      // Render Claims
-      container.innerHTML = '';
-      d.detailed_claims.forEach((cl, i) => {
+      // Propositions
+      propsContainer.innerHTML = '';
+      d.detailed_claims.forEach((cl, idx) => {
         const card = document.createElement('div');
-        card.className = 'claim-card';
+        card.className = 'prop-card';
 
-        let fallacyHtml = '';
+        let fallacyMarkup = '';
         if (cl.fallacy_analysis && cl.fallacy_analysis.detected) {
-          fallacyHtml = `
-            <div class="fallacy-box">
-              <strong>Adversarial Fallacy Detected:</strong> ${cl.fallacy_analysis.fallacy_type}
-              <p style="margin-top: 0.25rem;">${cl.fallacy_analysis.explanation}</p>
+          fallacyMarkup = `
+            <div class="fallacy-alert">
+              <strong>Adversarial Fallacy Flagged:</strong> ${cl.fallacy_analysis.fallacy_type}
+              <p style="margin-top: 0.2rem; font-size: 0.8rem;">${cl.fallacy_analysis.explanation}</p>
             </div>
           `;
         }
 
-        let sourcesHtml = '';
-        cl.corroborating_evidence.forEach(s => {
-          sourcesHtml += `
-            <div class="evidence-item">
-              <span class="source-tag">${s.source_type}</span>
-              <span class="trust-tag">Trust: ${Math.round(s.credibility_score * 100)}%</span>
-              <a href="${s.url}" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline; margin-left: 0.35rem; font-weight: 600;">
-                ${s.title}
-              </a>
-              <p style="color: var(--text-muted); margin-top: 0.25rem;">${s.snippet}</p>
-            </div>
-          `;
-        });
+        let sourcesMarkup = '';
+        if (cl.corroborating_evidence && cl.corroborating_evidence.length > 0) {
+          sourcesMarkup = '<div class="sources-tray"><strong style="font-size: 0.82rem;">Primary Authority Sources:</strong>';
+          cl.corroborating_evidence.forEach(s => {
+            sourcesMarkup += `
+              <div class="source-row">
+                <span class="tag">${s.source_type}</span>
+                <span class="tag">Trust: ${Math.round(s.credibility_score * 100)}%</span>
+                <a href="${s.url}" target="_blank" rel="noopener" class="source-link">${s.title}</a>
+                <p style="color: var(--text-muted); font-size: 0.78rem; margin-top: 0.2rem;">${s.snippet}</p>
+              </div>
+            `;
+          });
+          sourcesMarkup += '</div>';
+        }
 
         card.innerHTML = `
-          <div class="claim-title">Proposition #${i + 1}: ${cl.claim_text}</div>
-          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-            Category: <strong>${cl.topic_category}</strong> | Epistemic Status: <strong>${cl.epistemic_certainty}</strong>
+          <div class="prop-header">
+            <div class="prop-title">Proposition #${idx + 1}: ${cl.claim_text}</div>
           </div>
-          ${fallacyHtml}
-          ${sourcesHtml ? `<div style="margin-top: 0.5rem;"><strong style="font-size: 0.85rem;">Verified Primary Evidence:</strong>${sourcesHtml}</div>` : ''}
+          <div class="tag-row">
+            <span class="tag primary">${cl.topic_category}</span>
+            <span class="tag">${cl.epistemic_certainty}</span>
+          </div>
+          ${fallacyMarkup}
+          ${sourcesMarkup}
         `;
-        container.appendChild(card);
+        propsContainer.appendChild(card);
       });
 
-      // Render Telemetry
-      telemetry.innerHTML = '';
+      // Telemetry Table
+      telemetryTbody.innerHTML = '';
       d.audit_trail.forEach(m => {
-        const item = document.createElement('div');
-        item.className = 'metric-badge';
-        item.innerHTML = `<strong>${m.agent_name}</strong>: ${m.duration_ms} ms &bull; ${m.status}`;
-        telemetry.appendChild(item);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${m.agent_name}</strong></td>
+          <td>${m.duration_ms} ms</td>
+          <td><span style="color: var(--success);">&#x2714; ${m.status}</span></td>
+          <td>${m.items_processed}</td>
+        `;
+        telemetryTbody.appendChild(row);
       });
 
-      resultsPanel.style.display = 'block';
-      resultsPanel.scrollIntoView({ behavior: 'smooth' });
+      dossierSection.style.display = 'block';
+      dossierSection.scrollIntoView({ behavior: 'smooth' });
     }
 
     function exportJSON() {
