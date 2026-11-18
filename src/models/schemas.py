@@ -8,25 +8,37 @@ class VerdictType(str, Enum):
     VERIFIED_FALSE = "VERIFIED_FALSE"
     MISLEADING = "MISLEADING"
     UNVERIFIED = "UNVERIFIED"
-    CONFLICTING_EVIDENCE = "CONFLICTING_EVIDENCE"
+    CONTEXT_REQUIRED = "CONTEXT_REQUIRED"
+
+
+class FallacyType(str, Enum):
+    CHERRY_PICKING = "Cherry-Picking (Suppressed Evidence)"
+    APPEAL_TO_FALSE_AUTHORITY = "Appeal to False Authority"
+    FALSE_DILEMMA = "False Dilemma / Bifurcation"
+    HASTY_GENERALIZATION = "Hasty Generalization"
+    POST_HOC = "Post Hoc Ergo Propter Hoc (False Cause)"
+    CIRCULAR_REASONING = "Circular Reasoning (Begging the Question)"
+    APPEAL_TO_EMOTION_OR_FEAR = "Sensationalism / Appeal to Emotion"
+    NONE_DETECTED = "None Detected"
 
 
 class EvidenceType(str, Enum):
     PEER_REVIEWED = "PEER_REVIEWED"
     OFFICIAL_GOVERNMENT = "OFFICIAL_GOVERNMENT"
-    NEWS_ORGANIZATION = "NEWS_ORGANIZATION"
     ACADEMIC_INSTITUTION = "ACADEMIC_INSTITUTION"
-    ENCYCLOPEDIC = "ENCYCLOPEDIC"
-    SOCIAL_OR_UNVERIFIED = "SOCIAL_OR_UNVERIFIED"
+    TIER1_JOURNALISM = "TIER1_JOURNALISM"
+    FACT_CHECK_REGISTRY = "FACT_CHECK_REGISTRY"
+    GENERAL_WEB = "GENERAL_WEB"
 
 
 class EvidenceSource(BaseModel):
-    title: str = Field(..., min_length=2, max_length=250)
+    title: str = Field(..., min_length=2, max_length=300)
     url: str = Field(..., pattern=r"^https?://")
-    snippet: str = Field(..., min_length=5, max_length=1500)
-    source_type: EvidenceType = Field(default=EvidenceType.NEWS_ORGANIZATION)
+    snippet: str = Field(..., min_length=5, max_length=2000)
+    source_type: EvidenceType = Field(default=EvidenceType.TIER1_JOURNALISM)
     credibility_score: float = Field(..., ge=0.0, le=1.0)
     published_date: Optional[str] = None
+    domain: str = ""
 
 
 class AtomicClaim(BaseModel):
@@ -35,7 +47,16 @@ class AtomicClaim(BaseModel):
     normalized_claim: str
     topic_category: str
     requires_temporal_context: bool = False
+    temporal_anchor: Optional[str] = None
     entities: List[str] = Field(default_factory=list)
+    confidence_weight: float = Field(default=1.0, ge=0.1, le=2.0)
+
+
+class FallacyAssessment(BaseModel):
+    detected: bool
+    fallacy_type: FallacyType = FallacyType.NONE_DETECTED
+    explanation: str
+    severity_score: float = Field(default=0.0, ge=0.0, le=1.0)
 
 
 class ClaimVerificationResult(BaseModel):
@@ -43,11 +64,12 @@ class ClaimVerificationResult(BaseModel):
     claim_text: str
     verdict: VerdictType
     confidence_score: float = Field(..., ge=0.0, le=1.0)
-    reasoning: str
+    topic_category: str
     corroborating_evidence: List[EvidenceSource] = Field(default_factory=list)
     contradicting_evidence: List[EvidenceSource] = Field(default_factory=list)
-    red_team_critique: str
-    mitigation_notes: Optional[str] = None
+    fallacy_analysis: FallacyAssessment
+    adversarial_critique: str
+    epistemic_certainty: str
 
 
 class PipelineExecutionMetric(BaseModel):
@@ -55,15 +77,18 @@ class PipelineExecutionMetric(BaseModel):
     duration_ms: float
     status: str
     items_processed: int
+    memory_footprint_kb: float = 0.0
 
 
 class ResearchDossier(BaseModel):
     query_id: str
+    timestamp: str
     raw_query: str
     claims_analyzed: int
     overall_verdict: VerdictType
     overall_confidence: float = Field(..., ge=0.0, le=1.0)
+    verdict_badge_color: str
     executive_summary: str
     detailed_claims: List[ClaimVerificationResult]
-    audit_trail: List[PipelineExecutionMetric] = Field(default_factory=list)
+    audit_trail: List[PipelineExecutionMetric]
     meta: Dict[str, Any] = Field(default_factory=dict)
