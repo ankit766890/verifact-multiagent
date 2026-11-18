@@ -3,263 +3,290 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VeriFact | Multi-Agent Fact Verification Platform</title>
-  <meta name="description" content="An academic and enterprise fact-checking system utilizing multi-agent architecture and Bayesian verification.">
+  <title>VeriFact Enterprise | Autonomous Intelligence & Fact Verification Platform</title>
+  <meta name="description" content="Production multi-agent intelligence platform for enterprise risk compliance, media forensics, and automated claim verification.">
   
-  <!-- System & Academic Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --border: #e2e8f0;
-      --border-dark: #cbd5e1;
+      --bg-page: #f8fafc;
+      --surface-card: #ffffff;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
       
-      --text: #0f172a;
+      --text-main: #0f172a;
       --text-muted: #475569;
-      --text-light: #64748b;
+      --text-tertiary: #64748b;
       
-      --brand: #1e3a8a; /* Deep Navy */
-      --brand-hover: #1e40af;
-      --brand-light: #eff6ff;
+      --primary: #1e3a8a; /* Enterprise Navy */
+      --primary-hover: #1e40af;
+      --primary-tint: #eff6ff;
+      --primary-border: #bfdbfe;
       
-      --success-bg: #f0fdf4;
-      --success-border: #86efac;
-      --success-text: #166534;
+      --badge-success-bg: #ecfdf5;
+      --badge-success-border: #a7f3d0;
+      --badge-success-text: #065f46;
       
-      --danger-bg: #fef2f2;
-      --danger-border: #fca5a5;
-      --danger-text: #991b1b;
+      --badge-danger-bg: #fff1f2;
+      --badge-danger-border: #fecdd3;
+      --badge-danger-text: #9f1239;
       
-      --warning-bg: #fffbeb;
-      --warning-border: #fde68a;
-      --warning-text: #92400e;
+      --badge-warning-bg: #fffbeb;
+      --badge-warning-border: #fde68a;
+      --badge-warning-text: #92400e;
 
-      --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --mono: 'IBM Plex Mono', monospace;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Academic / Institutional Top Header */
-    header.site-header {
+    /* Enterprise Navigation Bar */
+    header.enterprise-header {
       background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.9rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
-    .header-left {
+    .brand-cluster {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
-    .app-title {
-      font-size: 1.15rem;
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
       font-weight: 700;
-      color: var(--brand);
+      font-size: 0.95rem;
+    }
+
+    .brand-text-block {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
       letter-spacing: -0.01em;
     }
 
-    .badge-institutional {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      background: var(--brand-light);
-      color: var(--brand);
-      border: 1px solid #bfdbfe;
-      padding: 0.2rem 0.5rem;
+    .brand-edition {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: var(--primary-tint);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 0.15rem 0.45rem;
       border-radius: 4px;
       font-weight: 600;
     }
 
-    .header-right {
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
-    .btn-tool {
+    .btn-action-tool {
       background: #ffffff;
-      border: 1px solid var(--border-dark);
+      border: 1px solid var(--border-strong);
       color: var(--text-muted);
       padding: 0.4rem 0.8rem;
-      border-radius: 4px;
+      border-radius: 5px;
       font-size: 0.82rem;
       font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
+      transition: all 0.15s;
     }
-    .btn-tool:hover {
-      background: var(--bg);
-      color: var(--text);
+    .btn-action-tool:hover {
+      background: var(--bg-page);
+      color: var(--text-main);
     }
 
     /* Main Container */
-    main.container {
-      max-width: 1080px;
+    main.main-viewport {
+      max-width: 1120px;
       margin: 2rem auto;
       padding: 0 1.5rem;
       width: 100%;
       flex: 1;
     }
 
-    .page-intro {
+    .title-banner {
       margin-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
       padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
-    .page-intro h1 {
+    .title-banner h1 {
       font-size: 1.85rem;
       font-weight: 700;
-      color: var(--text);
       letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
     }
 
-    .page-intro p {
+    .title-banner p {
       color: var(--text-muted);
       font-size: 1rem;
-      max-width: 760px;
+      max-width: 800px;
     }
 
-    /* Formal Multi-Agent Architecture Bar */
-    .architecture-matrix {
+    /* 4-Agent Operational Architecture Grid */
+    .agent-architecture-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
     }
 
-    .agent-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+    .agent-status-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
-      padding: 1rem;
+      padding: 1.1rem;
       position: relative;
+      transition: border-color 0.15s;
     }
 
-    .agent-card.active {
-      border-left: 4px solid var(--brand);
+    .agent-status-panel.active {
+      border-left: 3px solid var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    .agent-id {
-      font-family: var(--mono);
+    .agent-index {
+      font-family: var(--font-mono);
       font-size: 0.72rem;
       font-weight: 600;
-      color: var(--text-light);
+      color: var(--text-tertiary);
       text-transform: uppercase;
       margin-bottom: 0.25rem;
     }
 
-    .agent-heading {
+    .agent-title {
       font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--text);
+      font-weight: 650;
+      color: var(--text-main);
       margin-bottom: 0.35rem;
     }
 
-    .agent-description {
+    .agent-scope {
       font-size: 0.8rem;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
-    /* Mode Selection Tabs */
-    .mode-tab-group {
+    /* Mode Navigation Tabs */
+    .pipeline-tabs {
       display: flex;
-      border-bottom: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-strong);
       margin-bottom: 1.5rem;
       gap: 0.5rem;
     }
 
-    .mode-tab {
+    .tab-button {
       background: transparent;
       border: none;
       border-bottom: 2px solid transparent;
       color: var(--text-muted);
-      padding: 0.6rem 1rem;
+      padding: 0.65rem 1rem;
       font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       margin-bottom: -1px;
+      transition: all 0.15s;
     }
 
-    .mode-tab:hover {
-      color: var(--brand);
+    .tab-button:hover {
+      color: var(--primary);
     }
 
-    .mode-tab.active {
-      color: var(--brand);
-      border-bottom-color: var(--brand);
+    .tab-button.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
     }
 
-    /* Inquiry Input Section */
-    .input-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+    /* Inquiry Panel */
+    .inquiry-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 2rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
-    .form-group-header {
+    .inquiry-meta-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.5rem;
     }
 
-    label.section-label {
+    label.inquiry-label {
       font-size: 0.92rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-main);
     }
 
-    .char-metric {
-      font-family: var(--mono);
+    .char-indicator {
+      font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--text-light);
+      color: var(--text-tertiary);
     }
 
-    textarea.statement-box {
+    textarea.target-box {
       width: 100%;
       min-height: 110px;
-      border: 1px solid var(--border-dark);
-      border-radius: 4px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
       padding: 0.85rem;
-      font-family: var(--font);
+      font-family: var(--font-sans);
       font-size: 0.95rem;
-      color: var(--text);
+      color: var(--text-main);
       resize: vertical;
       line-height: 1.5;
     }
 
-    textarea.statement-box:focus {
-      outline: 2px solid var(--brand);
+    textarea.target-box:focus {
+      outline: 2px solid var(--primary);
       outline-offset: -1px;
     }
 
-    .form-controls {
+    .controls-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -268,47 +295,49 @@
       gap: 1rem;
     }
 
-    .benchmark-presets {
+    .preset-benchmark-bar {
       display: flex;
       align-items: center;
       gap: 0.4rem;
       flex-wrap: wrap;
     }
 
-    .preset-chip {
-      background: var(--bg);
-      border: 1px solid var(--border);
+    .preset-button {
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
+      padding: 0.3rem 0.65rem;
+      border-radius: 5px;
       font-size: 0.8rem;
       cursor: pointer;
+      transition: all 0.15s;
     }
 
-    .preset-chip:hover {
+    .preset-button:hover {
       background: #e2e8f0;
-      color: var(--text);
+      color: var(--text-main);
     }
 
-    .btn-execute {
-      background: var(--brand);
+    .btn-run-audit {
+      background: var(--primary);
       color: #ffffff;
       border: none;
-      padding: 0.65rem 1.4rem;
-      border-radius: 4px;
+      padding: 0.65rem 1.5rem;
+      border-radius: 5px;
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
+      transition: background 0.15s;
     }
 
-    .btn-execute:hover {
-      background: var(--brand-hover);
+    .btn-run-audit:hover {
+      background: var(--primary-hover);
     }
 
-    .btn-execute:disabled {
+    .btn-run-audit:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -317,36 +346,36 @@
     #executionLogPanel {
       display: none;
       background: #f1f5f9;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 1rem 1.25rem;
       margin-bottom: 2rem;
-      font-family: var(--mono);
-      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
     }
 
-    .log-entry {
-      margin-bottom: 0.3rem;
+    .log-row {
+      margin-bottom: 0.35rem;
       color: var(--text-muted);
     }
-    .log-agent { font-weight: 600; color: var(--brand); }
+    .log-agent-name { font-weight: 600; color: var(--primary); }
 
-    /* Dossier Results Section */
+    /* Results Dossier Presentation */
     #resultsDossier {
       display: none;
     }
 
-    .dossier-container {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+    .dossier-wrapper {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    .verdict-header-box {
-      border: 1px solid var(--border);
+    .verdict-status-container {
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 1.5rem;
       display: flex;
@@ -355,107 +384,107 @@
       margin-bottom: 2rem;
     }
 
-    .verdict-header-box.true {
-      background: var(--success-bg);
-      border-color: var(--success-border);
+    .verdict-status-container.true {
+      background: var(--badge-success-bg);
+      border-color: var(--badge-success-border);
     }
-    .verdict-header-box.false {
-      background: var(--danger-bg);
-      border-color: var(--danger-border);
+    .verdict-status-container.false {
+      background: var(--badge-danger-bg);
+      border-color: var(--badge-danger-border);
     }
-    .verdict-header-box.misleading {
-      background: var(--warning-bg);
-      border-color: var(--warning-border);
+    .verdict-status-container.misleading {
+      background: var(--badge-warning-bg);
+      border-color: var(--badge-warning-border);
     }
 
-    .verdict-status {
-      font-size: 1.4rem;
+    .verdict-title {
+      font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: -0.01em;
     }
-    .verdict-header-box.true .verdict-status { color: var(--success-text); }
-    .verdict-header-box.false .verdict-status { color: var(--danger-text); }
-    .verdict-header-box.misleading .verdict-status { color: var(--warning-text); }
+    .verdict-status-container.true .verdict-title { color: var(--badge-success-text); }
+    .verdict-status-container.false .verdict-title { color: var(--badge-danger-text); }
+    .verdict-status-container.misleading .verdict-title { color: var(--badge-warning-text); }
 
-    .verdict-memo {
+    .verdict-description {
       margin-top: 0.4rem;
       font-size: 0.95rem;
-      color: var(--text);
-      max-width: 720px;
+      color: var(--text-main);
+      max-width: 750px;
     }
 
-    .confidence-summary {
+    .confidence-readout {
       text-align: right;
     }
 
-    .confidence-metric {
-      font-family: var(--mono);
+    .confidence-score {
+      font-family: var(--font-mono);
       font-size: 2.2rem;
       font-weight: 700;
       line-height: 1;
-      color: var(--text);
+      color: var(--text-main);
     }
 
     .confidence-label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       font-weight: 600;
-      color: var(--text-light);
+      color: var(--text-tertiary);
       margin-top: 0.25rem;
     }
 
-    /* Atomic Propositions List */
-    .propositions-wrapper {
+    /* Propositions Section */
+    .propositions-block {
       margin-bottom: 2rem;
     }
 
-    .section-title {
-      font-size: 1.15rem;
+    .block-heading {
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      color: var(--text);
+      color: var(--text-main);
     }
 
-    .proposition-item {
-      border: 1px solid var(--border);
+    .proposition-card {
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 1.25rem;
       margin-bottom: 1rem;
       background: #ffffff;
     }
 
-    .prop-text {
+    .proposition-statement {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-main);
       margin-bottom: 0.5rem;
     }
 
-    .prop-meta-bar {
+    .pill-row {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 0.75rem;
       flex-wrap: wrap;
     }
 
-    .meta-tag {
+    .pill {
       font-size: 0.75rem;
       font-weight: 500;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
       color: var(--text-muted);
     }
 
-    .meta-tag.brand {
-      background: var(--brand-light);
-      border-color: #bfdbfe;
-      color: var(--brand);
+    .pill.brand-accent {
+      background: var(--primary-tint);
+      border-color: var(--primary-border);
+      color: var(--primary);
     }
 
-    .fallacy-warning-box {
-      background: var(--warning-bg);
+    .fallacy-callout-box {
+      background: var(--badge-warning-bg);
       border-left: 4px solid #f59e0b;
       padding: 0.75rem 1rem;
       border-radius: 0 4px 4px 0;
@@ -464,55 +493,55 @@
       color: #78350f;
     }
 
-    .sources-container {
+    .evidence-record-tray {
       margin-top: 1rem;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-subtle);
       padding-top: 0.75rem;
     }
 
-    .source-record {
+    .evidence-entry {
       margin-top: 0.5rem;
       font-size: 0.85rem;
     }
 
-    .source-record a {
-      color: var(--brand);
+    .evidence-entry a {
+      color: var(--primary);
       text-decoration: underline;
       font-weight: 600;
     }
 
     /* Telemetry Table */
-    .telemetry-table-formal {
+    .telemetry-grid-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.85rem;
-      font-family: var(--mono);
+      font-family: var(--font-mono);
       margin-top: 1rem;
     }
 
-    .telemetry-table-formal th, .telemetry-table-formal td {
-      border: 1px solid var(--border);
-      padding: 0.6rem 0.8rem;
+    .telemetry-grid-table th, .telemetry-grid-table td {
+      border: 1px solid var(--border-subtle);
+      padding: 0.6rem 0.85rem;
       text-align: left;
     }
 
-    .telemetry-table-formal th {
+    .telemetry-grid-table th {
       background: #f1f5f9;
       color: var(--text-muted);
       font-weight: 600;
     }
 
-    .dossier-export-footer {
+    .export-footer-strip {
       display: flex;
       justify-content: flex-end;
       gap: 0.5rem;
       margin-top: 1.5rem;
       padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-subtle);
     }
 
-    footer.site-footer {
-      border-top: 1px solid var(--border);
+    footer.enterprise-footer {
+      border-top: 1px solid var(--border-subtle);
       background: #ffffff;
       padding: 1.5rem 2rem;
       text-align: center;
@@ -520,109 +549,112 @@
       color: var(--text-muted);
     }
 
-    @media (max-width: 768px) {
-      .architecture-matrix { grid-template-columns: 1fr; }
-      .verdict-header-box { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .confidence-summary { text-align: left; }
+    @media (max-width: 800px) {
+      .agent-architecture-grid { grid-template-columns: 1fr; }
+      .verdict-status-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .confidence-readout { text-align: left; }
     }
   </style>
 </head>
 <body>
-  <!-- Header Bar -->
-  <header class="site-header">
-    <div class="header-left">
-      <span class="app-title">VeriFact Research Intelligence</span>
-      <span class="badge-institutional">Track PS03: Multi-Agent Fact-Checking</span>
+  <!-- Global Enterprise Header -->
+  <header class="enterprise-header">
+    <div class="brand-cluster">
+      <div class="brand-mark" aria-hidden="true">V</div>
+      <div class="brand-text-block">
+        <span class="brand-title">VeriFact</span>
+        <span class="brand-edition">Enterprise Intelligence</span>
+      </div>
     </div>
-    <div class="header-right">
-      <button class="btn-tool" onclick="readAloud()">
+    <div class="header-actions">
+      <button class="btn-action-tool" onclick="readAloud()" aria-label="Listen to Audio Briefing">
         <span>🔊</span> Audio Brief
       </button>
-      <button class="btn-tool" onclick="window.print()">
-        <span>🖶</span> Print Report
+      <button class="btn-action-tool" onclick="window.print()" aria-label="Print Formal Audit Report">
+        <span>🖶</span> Print Dossier
       </button>
-      <button class="btn-tool" onclick="exportJSON()">
+      <button class="btn-action-tool" onclick="exportJSON()" aria-label="Export JSON Dossier">
         <span>&darr;</span> Export JSON
       </button>
     </div>
   </header>
 
-  <main class="container">
-    <!-- Academic Overview -->
-    <section class="page-intro">
+  <main class="main-viewport">
+    <!-- Platform Intro -->
+    <section class="title-banner">
       <h1>Autonomous Multi-Agent Fact Verification Platform</h1>
       <p>
-        A deterministic, multi-agent cognitive architecture designed for decomposing compound discourse, 
+        An enterprise-grade cognitive architecture engineered for decomposing complex discourse, 
         evaluating certified authority domain trust, and conducting adversarial red-team scrutiny against formal and informal logical fallacies.
       </p>
     </section>
 
-    <!-- Execution Mode Selector -->
-    <div class="mode-tab-group" role="tablist">
-      <button type="button" class="mode-tab active" id="tabPipeline" onclick="setMode('PIPELINE')">
+    <!-- Execution Mode Selector Tabs -->
+    <div class="pipeline-tabs" role="tablist" aria-label="Execution Mode Navigation">
+      <button type="button" class="tab-button active" id="tabPipeline" onclick="setMode('PIPELINE')" role="tab">
         Full 4-Agent Pipeline
       </button>
-      <button type="button" class="mode-tab" id="tabPlanner" onclick="setMode('PLANNER')">
+      <button type="button" class="tab-button" id="tabPlanner" onclick="setMode('PLANNER')" role="tab">
         Agent 1: Lead Planner
       </button>
-      <button type="button" class="mode-tab" id="tabEvidence" onclick="setMode('EVIDENCE')">
+      <button type="button" class="tab-button" id="tabEvidence" onclick="setMode('EVIDENCE')" role="tab">
         Agent 2: Evidence Hub
       </button>
-      <button type="button" class="mode-tab" id="tabRedteam" onclick="setMode('REDTEAM')">
+      <button type="button" class="tab-button" id="tabRedteam" onclick="setMode('REDTEAM')" role="tab">
         Agent 3: Red-Team Verifier
       </button>
     </div>
 
-    <!-- Agent Architecture Breakdown -->
-    <div class="architecture-matrix">
-      <div class="agent-card active" id="cardAgent1">
-        <div class="agent-id">Agent 01</div>
-        <div class="agent-heading">Lead Planner Agent</div>
-        <div class="agent-description">Deconstructs compound discourse into atomic claims with temporal anchors and entity tags.</div>
+    <!-- 4-Agent Architectural Matrix -->
+    <div class="agent-architecture-grid" aria-label="Agent Infrastructure">
+      <div class="agent-status-panel active" id="cardAgent1">
+        <div class="agent-index">Agent 01</div>
+        <div class="agent-title">Lead Planner Agent</div>
+        <div class="agent-scope">Deconstructs compound statements into atomic verifiable claims with temporal anchors and entity tags.</div>
       </div>
-      <div class="agent-card active" id="cardAgent2">
-        <div class="agent-id">Agent 02</div>
-        <div class="agent-heading">Evidence Hub Agent</div>
-        <div class="agent-description">Cross-references primary governmental (.gov), health (.org/.int), and peer-reviewed registries.</div>
+      <div class="agent-status-panel active" id="cardAgent2">
+        <div class="agent-index">Agent 02</div>
+        <div class="agent-title">Evidence Hub Agent</div>
+        <div class="agent-scope">Cross-references primary governmental (.gov), health (.org/.int), and peer-reviewed domain registries.</div>
       </div>
-      <div class="agent-card active" id="cardAgent3">
-        <div class="agent-id">Agent 03</div>
-        <div class="agent-heading">Red-Team Verifier</div>
-        <div class="agent-description">Conducts adversarial analysis screening for 7 classes of informal logical fallacies and data bias.</div>
+      <div class="agent-status-panel active" id="cardAgent3">
+        <div class="agent-index">Agent 03</div>
+        <div class="agent-title">Red-Team Verifier</div>
+        <div class="agent-scope">Conducts adversarial scrutiny screening for 7 classes of informal logical fallacies and data bias.</div>
       </div>
-      <div class="agent-card active" id="cardAgent4">
-        <div class="agent-id">Agent 04</div>
-        <div class="agent-heading">Chief Synthesizer</div>
-        <div class="agent-description">Performs Bayesian trust weighting and generates structured, audit-ready verification dossiers.</div>
+      <div class="agent-status-panel active" id="cardAgent4">
+        <div class="agent-index">Agent 04</div>
+        <div class="agent-title">Chief Synthesizer</div>
+        <div class="agent-scope">Performs Bayesian trust weighting and generates structured, audit-ready verification dossiers.</div>
       </div>
     </div>
 
-    <!-- Input Section -->
-    <section class="input-section">
+    <!-- Inquiry Card -->
+    <section class="inquiry-card">
       <form id="verifyForm">
-        <div class="form-group-header">
-          <label for="statementInput" class="section-label">Target Text / Proposition for Investigation</label>
-          <span class="char-metric" id="charCount">0 / 1500 chars</span>
+        <div class="inquiry-meta-row">
+          <label for="statementInput" class="inquiry-label">Target Text / Proposition for Investigation</label>
+          <span class="char-indicator" id="charCount">0 / 2500 chars</span>
         </div>
         <textarea
           id="statementInput"
-          class="statement-box"
+          class="target-box"
           required
-          maxlength="1500"
+          maxlength="2500"
           placeholder="Input a news excerpt, factual claim, or statement to initiate multi-agent cross-verification..."
           oninput="updateCount(this)"
         ></textarea>
 
-        <div class="form-controls">
-          <div class="benchmark-presets">
-            <span style="font-size: 0.8rem; color: var(--text-light); font-weight: 500;">Presets:</span>
-            <button type="button" class="preset-chip" onclick="loadSample(1)">NASA Apollo Moon Landing</button>
-            <button type="button" class="preset-chip" onclick="loadSample(2)">Vaccines & Public Health</button>
-            <button type="button" class="preset-chip" onclick="loadSample(3)">Planetary Curvature</button>
-            <button type="button" class="preset-chip" onclick="loadSample(4)">Sensationalist Health Claim</button>
+        <div class="controls-strip">
+          <div class="preset-benchmark-bar">
+            <span style="font-size: 0.8rem; color: var(--text-tertiary); font-weight: 500;">Presets:</span>
+            <button type="button" class="preset-button" onclick="loadSample(1)">NASA Apollo Moon Landing</button>
+            <button type="button" class="preset-button" onclick="loadSample(2)">Vaccines & Public Health</button>
+            <button type="button" class="preset-button" onclick="loadSample(3)">Planetary Curvature</button>
+            <button type="button" class="preset-button" onclick="loadSample(4)">Sensationalist Health Claim</button>
           </div>
 
-          <button type="submit" class="btn-execute" id="submitBtn">
+          <button type="submit" class="btn-run-audit" id="submitBtn">
             <span id="btnText">Execute Multi-Agent Audit</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
@@ -630,36 +662,36 @@
       </form>
     </section>
 
-    <!-- Execution Log Audit -->
+    <!-- Execution Log Audit Panel -->
     <section id="executionLogPanel">
-      <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text);">Agent Telemetry Dispatch:</div>
+      <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Agent Telemetry Dispatch:</div>
       <div id="executionLogs"></div>
     </section>
 
-    <!-- Research Dossier -->
-    <section id="resultsDossier">
-      <div class="dossier-container">
-        <!-- Verdict Banner -->
-        <div class="verdict-header-box" id="verdictBox">
+    <!-- Intelligence Research Dossier -->
+    <section id="resultsDossier" aria-live="polite">
+      <div class="dossier-wrapper">
+        <!-- Verdict Box -->
+        <div class="verdict-status-container" id="verdictBox">
           <div>
-            <div class="verdict-status" id="verdictTitle">VERDICT PENDING</div>
-            <p class="verdict-memo" id="verdictSummary"></p>
+            <div class="verdict-title" id="verdictTitle">VERDICT PENDING</div>
+            <p class="verdict-description" id="verdictSummary"></p>
           </div>
-          <div class="confidence-summary">
-            <div class="confidence-metric" id="confidenceVal">--%</div>
+          <div class="confidence-readout">
+            <div class="confidence-score" id="confidenceVal">--%</div>
             <div class="confidence-label">Bayesian Confidence</div>
           </div>
         </div>
 
-        <!-- Propositions -->
-        <div class="propositions-wrapper">
-          <div class="section-title">Deconstructed Propositions & Verification Audit</div>
+        <!-- Atomic Propositions -->
+        <div class="propositions-block">
+          <div class="block-heading">Deconstructed Propositions & Verification Audit</div>
           <div id="propositionsContainer"></div>
         </div>
 
-        <!-- Telemetry Table -->
-        <div class="section-title" style="margin-top: 2rem;">Pipeline Execution Metrics</div>
-        <table class="telemetry-table-formal">
+        <!-- Execution Telemetry -->
+        <div class="block-heading" style="margin-top: 2rem;">Pipeline Execution Metrics</div>
+        <table class="telemetry-grid-table" aria-label="Pipeline Telemetry">
           <thead>
             <tr>
               <th>Agent Name</th>
@@ -673,20 +705,20 @@
         </table>
 
         <!-- Dossier Footer -->
-        <div class="dossier-export-footer">
-          <button class="btn-tool" onclick="exportJSON()">
+        <div class="export-footer-strip">
+          <button class="btn-action-tool" onclick="exportJSON()">
             <span>&darr;</span> Download JSON Dossier
           </button>
-          <button class="btn-tool" onclick="window.print()">
-            <span>🖶</span> Print Academic Report
+          <button class="btn-action-tool" onclick="window.print()">
+            <span>🖶</span> Print Dossier
           </button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    VeriFact Multi-Agent Research System &bull; Architectural Submission for Hacktoskill PS03 &bull; Open-Source MIT License
+  <footer class="enterprise-footer">
+    VeriFact Enterprise &bull; Autonomous Multi-Agent Research & Verification Platform &bull; Open-Source MIT License
   </footer>
 
   <script>
@@ -694,7 +726,7 @@
     let selectedMode = 'PIPELINE';
 
     function updateCount(el) {
-      document.getElementById('charCount').innerText = `${el.value.length} / 1500 chars`;
+      document.getElementById('charCount').innerText = `${el.value.length} / 2500 chars`;
     }
 
     const samples = {
@@ -755,7 +787,7 @@
 
       logContainer.innerHTML = '';
       logPanel.style.display = 'block';
-      logContainer.innerHTML += `<div class="log-entry"><span class="log-agent">System:</span> Dispatching task to orchestrator in mode [${selectedMode}]...</div>`;
+      logContainer.innerHTML += `<div class="log-row"><span class="log-agent-name">System:</span> Dispatching task to orchestrator in mode [${selectedMode}]...</div>`;
 
       try {
         const res = await fetch('/api/v1/verify', {
@@ -773,13 +805,13 @@
 
         if (currentDossier.agent_timeline && currentDossier.agent_timeline.length > 0) {
           currentDossier.agent_timeline.forEach(step => {
-            logContainer.innerHTML += `<div class="log-entry"><span class="log-agent">${step.agent_name}:</span> ${step.action} &mdash; ${step.thought_summary}</div>`;
+            logContainer.innerHTML += `<div class="log-row"><span class="log-agent-name">${step.agent_name}:</span> ${step.action} &mdash; ${step.thought_summary}</div>`;
           });
         }
 
         renderDossier(currentDossier);
       } catch (err) {
-        logContainer.innerHTML += `<div class="log-entry" style="color: var(--danger-text);">Execution error: ${err.message}</div>`;
+        logContainer.innerHTML += `<div class="log-row" style="color: var(--badge-danger-text);">Execution error: ${err.message}</div>`;
         alert('Audit Error: ' + err.message);
       } finally {
         submitBtn.disabled = false;
@@ -796,7 +828,7 @@
       const container = document.getElementById('propositionsContainer');
       const tbody = document.getElementById('telemetryTbody');
 
-      box.className = 'verdict-header-box ' + (
+      box.className = 'verdict-status-container ' + (
         d.overall_verdict === 'VERIFIED_TRUE' ? 'true' :
         d.overall_verdict === 'VERIFIED_FALSE' ? 'false' : 'misleading'
       );
@@ -805,16 +837,15 @@
       summary.innerText = d.executive_summary;
       confVal.innerText = Math.round(d.overall_confidence * 100) + '%';
 
-      // Render Propositions
       container.innerHTML = '';
       d.detailed_claims.forEach((cl, i) => {
         const item = document.createElement('div');
-        item.className = 'proposition-item';
+        item.className = 'proposition-card';
 
         let fallacyNotice = '';
         if (cl.fallacy_analysis && cl.fallacy_analysis.detected) {
           fallacyNotice = `
-            <div class="fallacy-warning-box">
+            <div class="fallacy-callout-box">
               <strong>Adversarial Fallacy Identified:</strong> ${cl.fallacy_analysis.fallacy_type}
               <p style="margin-top: 0.2rem;">${cl.fallacy_analysis.explanation}</p>
             </div>
@@ -823,12 +854,12 @@
 
         let sourcesMarkup = '';
         if (cl.corroborating_evidence && cl.corroborating_evidence.length > 0) {
-          sourcesMarkup = '<div class="sources-container"><strong style="font-size: 0.85rem;">Corroborating Primary Authority Sources:</strong>';
+          sourcesMarkup = '<div class="evidence-record-tray"><strong style="font-size: 0.85rem;">Corroborating Primary Authority Sources:</strong>';
           cl.corroborating_evidence.forEach(s => {
             sourcesMarkup += `
-              <div class="source-record">
-                <span class="meta-tag brand">${s.source_type}</span>
-                <span class="meta-tag">Trust Index: ${Math.round(s.credibility_score * 100)}%</span>
+              <div class="evidence-entry">
+                <span class="pill brand-accent">${s.source_type}</span>
+                <span class="pill">Trust Index: ${Math.round(s.credibility_score * 100)}%</span>
                 <a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>
                 <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">${s.snippet}</p>
               </div>
@@ -838,10 +869,10 @@
         }
 
         item.innerHTML = `
-          <div class="prop-text">Proposition ${i + 1}: ${cl.claim_text}</div>
-          <div class="prop-meta-bar">
-            <span class="meta-tag brand">${cl.topic_category}</span>
-            <span class="meta-tag">Epistemic Status: ${cl.epistemic_certainty}</span>
+          <div class="proposition-statement">Proposition ${i + 1}: ${cl.claim_text}</div>
+          <div class="pill-row">
+            <span class="pill brand-accent">${cl.topic_category}</span>
+            <span class="pill">Epistemic Status: ${cl.epistemic_certainty}</span>
           </div>
           ${fallacyNotice}
           ${sourcesMarkup}
@@ -849,7 +880,6 @@
         container.appendChild(item);
       });
 
-      // Telemetry
       tbody.innerHTML = '';
       d.audit_trail.forEach(m => {
         const row = document.createElement('tr');

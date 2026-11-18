@@ -14,7 +14,7 @@ class SynthesizerAgent(BaseAgent):
     """
     Agent 4: Chief Synthesizer Agent.
     Aggregates atomic claim verifications, weights source credibility via Bayesian heuristics,
-    and produces an authoritative, auditable Research Dossier ready for regulatory or forensic review.
+    and produces an authoritative, auditable Research Dossier ready for regulatory, legal, or enterprise review.
     """
 
     def __init__(self):
@@ -31,7 +31,7 @@ class SynthesizerAgent(BaseAgent):
 
         if not detailed_claims:
             return ResearchDossier(
-                query_id=f"DOS-{uuid.uuid4().hex[:8].upper()}",
+                query_id=f"VF-{uuid.uuid4().hex[:8].upper()}",
                 timestamp=now_iso,
                 raw_query=query_text,
                 claims_analyzed=0,
@@ -41,10 +41,9 @@ class SynthesizerAgent(BaseAgent):
                 executive_summary="No verifiable atomic propositions could be extracted from the provided text.",
                 detailed_claims=[],
                 audit_trail=audit_trail,
-                meta={"synthesizer_version": "2.0.0-PROD"}
+                meta={"synthesizer_version": "2.4.0-ENTERPRISE"}
             )
 
-        # Multi-factor verdict weighting
         false_count = sum(1 for c in detailed_claims if c.verdict == VerdictType.VERIFIED_FALSE)
         misleading_count = sum(1 for c in detailed_claims if c.verdict in [VerdictType.MISLEADING, VerdictType.CONTEXT_REQUIRED])
         true_count = sum(1 for c in detailed_claims if c.verdict == VerdictType.VERIFIED_TRUE)
@@ -65,30 +64,30 @@ class SynthesizerAgent(BaseAgent):
             overall_verdict = VerdictType.VERIFIED_FALSE
             badge_color = "#ef4444"
             summary = (
-                f"Adversarial intelligence confirms conclusive factual falsification across {false_count} of {total_claims} proposition(s). "
-                "Primary registries and scientific observations contradict the core premises of the submitted statement."
+                f"Multi-agent forensic intelligence confirms conclusive factual falsification across {false_count} of {total_claims} proposition(s). "
+                "Primary registries and verified empirical records contradict the core premises of the submitted statement."
             )
         elif misleading_count > 0:
             overall_verdict = VerdictType.MISLEADING
             badge_color = "#f59e0b"
             summary = (
-                f"Investigation identified {misleading_count} proposition(s) containing cherry-picked data, cognitive fallacies, or missing context. "
-                "While tangential assertions may be partially grounded, the overall synthesis presents a materially distorted narrative."
+                f"Investigation identified {misleading_count} proposition(s) containing cherry-picked data, cognitive fallacies, or omitted context. "
+                "While isolated assertions may possess partial veracity, the overall synthesis presents a materially distorted factual narrative."
             )
         elif true_count == total_claims:
             overall_verdict = VerdictType.VERIFIED_TRUE
             badge_color = "#10b981"
             summary = (
                 f"All {total_claims} atomic propositions have been empirically validated against certified governmental, academic, and peer-reviewed registries. "
-                "Adversarial red-teaming identified zero unaddressed logical fallacies."
+                "Adversarial red-teaming verified zero unaddressed cognitive fallacies."
             )
         else:
             overall_verdict = VerdictType.UNVERIFIED
             badge_color = "#64748b"
-            summary = "Empirical evidence is inconclusive; insufficient certified registries available to establish truth value."
+            summary = "Empirical evidence is inconclusive; insufficient certified primary registries available to conclusively establish truth value."
 
         return ResearchDossier(
-            query_id=f"DOS-{uuid.uuid4().hex[:8].upper()}",
+            query_id=f"VF-{uuid.uuid4().hex[:8].upper()}",
             timestamp=now_iso,
             raw_query=query_text,
             claims_analyzed=total_claims,
@@ -99,9 +98,9 @@ class SynthesizerAgent(BaseAgent):
             detailed_claims=detailed_claims,
             audit_trail=audit_trail,
             meta={
-                "synthesizer_version": "2.0.0-PROD",
-                "framework": "VeriFact Multi-Agent Autonomous Protocol",
+                "synthesizer_version": "2.4.0-ENTERPRISE",
+                "framework": "VeriFact Multi-Agent Cognitive Research Protocol",
                 "total_sources_verified": sum(len(c.corroborating_evidence) + len(c.contradicting_evidence) for c in detailed_claims),
-                "evaluation_alignment": "PS03: Multi-Agent Research & Fact-Checking"
+                "compliance_audit_ready": True
             }
         )

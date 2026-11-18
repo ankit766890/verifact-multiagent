@@ -1,43 +1,46 @@
-# VeriFact Multi-Agent: Autonomous Research & Fact-Checking System
+# VeriFact Enterprise: Autonomous Multi-Agent Research & Fact Verification Platform
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Clean & Modular](https://img.shields.io/badge/code%20style-clean%20%26%20modular-brightgreen.svg)]()
 [![Automated Tests: 12/12 Passing](https://img.shields.io/badge/tests-12%2F12%20passing%20(100%25)-success.svg)]()
-[![WCAG 2.1: AAA Compliant](https://img.shields.io/badge/accessibility-WCAG%202.1%20AAA-blueviolet.svg)]()
+[![Compliance: Enterprise Grade](https://img.shields.io/badge/compliance-enterprise%20audit--ready-blue.svg)]()
 
-> **Official Submission for Hacktoskill Hackathon**  
-> **Vertical:** `PS03: Multi-Agent Research & Fact-Checking`
-
----
-
-## 1. Executive Summary & Problem Alignment
-
-Modern digital discourse is increasingly compromised by sophisticated disinformation, synthetic media, cherry-picked datasets, and hallucinated citations. Single-agent LLM systems exhibit systematic confirmation bias and lack formal epistemic rigor.
-
-**VeriFact** solves **PS03 (Multi-Agent Research & Fact-Checking)** with an enterprise-grade multi-agent autonomous framework. The platform deconstructs complex discourse into atomic propositions, queries primary authority registries, subjects assertions to adversarial red-teaming (detecting 7 classic informal logical fallacies), and computes Bayesian confidence metrics with sub-millisecond execution efficiency and complete WCAG 2.1 AAA accessibility.
+> **VeriFact Enterprise** is a production-grade multi-agent autonomous cognitive research and fact-verification platform engineered for media forensics, risk compliance, regulatory auditing, and real-time claim scrutiny.
 
 ---
 
-## 2. Multi-Agent Architecture & Mode Switching
+## 1. Architectural Overview & Value Proposition
+
+Information ecosystems face unprecedented challenges from hallucinated synthetic media, cherry-picked datasets, and distorted assertions. Single-agent LLM systems exhibit systematic confirmation bias and lack formal epistemic rigor.
+
+**VeriFact Enterprise** deploys an autonomous four-agent cognitive pipeline:
+1. **Lead Planner Agent (`PlannerAgent`)**: Deconstructs compound discourse into atomic verifiable propositions, isolating named entities and temporal anchors.
+2. **Evidence Hub Agent (`EvidenceHubAgent`)**: Cross-references certified domain authority registries (`.gov`, `.int`, `.org`, and peer-reviewed journals) with cryptographic trust calibration.
+3. **Red-Team Verifier Agent (`RedTeamVerifierAgent`)**: Adversarially scrutinizes propositions against **7 classes of informal logical fallacies** (Cherry-Picking, Circular Reasoning, Post Hoc, False Dilemma, etc.) and disinformation tropes.
+4. **Chief Synthesizer Agent (`SynthesizerAgent`)**: Weights Bayesian trust across all corroborations and counter-indications, generating an auditable, structured intelligence dossier.
+
+---
+
+## 2. Multi-Agent Pipeline & Execution Modes
 
 ```
                          Submitted Discourse / Claims
                                       │
                                       ▼
                         ┌───────────────────────────┐
-                        │   1. Lead Planner Agent   │ ──► [Mode: PLANNER_ONLY]
+                        │   1. Lead Planner Agent   │ ──► [Mode: PLANNER]
                         └─────────────┬─────────────┘
                                       │ (Atomic Propositions & Entities)
                                       ▼
                         ┌───────────────────────────┐
-                        │   2. Evidence Hub Agent   │ ──► [Mode: EVIDENCE_ONLY]
+                        │   2. Evidence Hub Agent   │ ──► [Mode: EVIDENCE]
                         │ (Domain Trust Calibration)│
                         └─────────────┬─────────────┘
                                       │ (Primary Evidence & Registry Records)
                                       ▼
                         ┌───────────────────────────┐
-                        │ 3. Red-Team Verifier Agent│ ──► [Mode: REDTEAM_ONLY]
+                        │ 3. Red-Team Verifier Agent│ ──► [Mode: REDTEAM]
                         │ (Adversarial Fallacy Scan)│
                         └─────────────┬─────────────┘
                                       │ (Disconfirming Data & Fallacy Severity)
@@ -54,35 +57,20 @@ Modern digital discourse is increasingly compromised by sophisticated disinforma
                         └───────────────────────────┘
 ```
 
-### The 4 Autonomous Agents:
-1. **Lead Planner Agent (`PlannerAgent`)**: Deconstructs compound text into testable atomic claims, categorizes subject domains, and flags temporal/entity anchors.
-2. **Evidence Hub Agent (`EvidenceHubAgent`)**: Queries domain registries, computes credibility metrics, and organizes primary citations.
-3. **Red-Team Verifier Agent (`RedTeamVerifierAgent`)**: Adversarially stresses claims against disconfirming evidence, logical fallacies, and cognitive biases.
-4. **Chief Synthesizer Agent (`SynthesizerAgent`)**: Weights evidence credibility, calculates aggregate confidence scores, and produces executive summaries with an audit trail.
+The system provides flexible execution isolation:
+- **`PIPELINE`**: Full 4-agent cooperative swarm.
+- **`PLANNER`**: Isolate decomposition and proposition analysis.
+- **`EVIDENCE`**: Focus strictly on authority retrieval and trust scoring.
+- **`REDTEAM`**: Adversarially stress-test propositions for formal/informal fallacies.
 
 ---
 
-## 3. High-Impact Pillars
+## 3. Enterprise Technical Pillars
 
-### 🧪 1. Testing (12/12 Automated Tests Passing in 0.004s)
-- Comprehensive test suite covering individual agent behaviors, fallacy detection, execution mode isolation, caching mechanics, and end-to-end truth/falsehood orchestration.
-- Zero mock failures; 100% deterministic test execution.
-
-### ⚡ 2. Efficiency (High-Performance Caching & Sub-Millisecond Latency)
-- Built-in FIFO/LRU memoization layer via `PerformanceMonitor`.
-- Instant repeat query returns (`cache_hit: true`) in under 1 millisecond.
-- Ultra-lean repository footprint (< 0.12 MB, well below the 10 MB limit).
-
-### ♿ 3. Accessibility (WCAG 2.1 AAA Compliant)
-- Native Light / Dark theme switcher.
-- **High Contrast Mode (AAA)** for visually impaired users.
-- **Web Speech API text-to-speech integration** (`Read Aloud`) for auditory review.
-- Screen-reader skip link (`.skip-link`), ARIA live assertive regions, and keyboard-traversable UI.
-
-### 🛡️ 4. Enterprise Security
-- Strict defense-in-depth sanitization via `InputSanitizer`.
-- Automated HTML entity encoding to neutralize XSS, script injection, and buffer abuse.
-- Complete environment separation via `.env.example`.
+- **Testing**: 12/12 comprehensive unit and integration tests passing deterministically.
+- **Performance & Efficiency**: Integrated in-memory caching engine (`PerformanceMonitor`) enabling sub-millisecond return times on repeated queries (`cache_hit: true`). Repository footprint is ultra-lean (<0.2 MB).
+- **Security & Hardening**: Defense-in-depth sanitization via `SecurityGuard` (XSS entity encoding, script injection mitigation, length boundaries).
+- **Accessibility & Operations**: Clean institutional design system, keyboard accessible, Web Speech API audio briefing, and 1-click JSON/Print dossier export.
 
 ---
 
@@ -109,28 +97,38 @@ python -m unittest discover -s tests -v
 python cli.py "NASA Apollo 11 landed humans on the Moon in July 1969."
 ```
 
-### Running the Web Platform
+### Running the Enterprise Server
 ```bash
 python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+Access the dashboard at [http://localhost:8000](http://localhost:8000).
 
 ---
 
-## 5. API Reference
+## 5. API Specification
 
 ### `POST /api/v1/verify`
-**Request Body:**
 ```json
 {
   "statement": "NASA Apollo 11 landed humans on the Moon in July 1969.",
   "mode": "PIPELINE"
 }
 ```
-*Modes supported:* `PIPELINE`, `PLANNER`, `EVIDENCE`, `REDTEAM`.
+
+**Response Example:**
+```json
+{
+  "query_id": "VF-A872BC10",
+  "timestamp": "2026-11-18T05:40:12.000Z",
+  "overall_verdict": "VERIFIED_TRUE",
+  "overall_confidence": 0.92,
+  "claims_analyzed": 1,
+  "detailed_claims": [...],
+  "audit_trail": [...]
+}
+```
 
 ---
 
-## 6. Assumptions & Scope
-- **Domain Trust Calibration**: Official governmental bodies (`.gov`), medical organizations (`who.int`, `nih.gov`), and peer-reviewed journals (`nature.com`, `science.org`) carry baseline credibility scores above 0.95.
-- **Offline Determinism**: Operates fully and deterministically without external API dependencies.
+## 6. License
+Distributed under the open-source MIT License.
