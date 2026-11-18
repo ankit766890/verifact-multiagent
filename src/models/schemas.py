@@ -3,6 +3,13 @@ from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 
 
+class ExecutionMode(str, Enum):
+    PIPELINE = "PIPELINE"       # All 4 agents work cooperatively
+    PLANNER_ONLY = "PLANNER"    # Only Agent 1 (Decomposition & Entity Extraction)
+    EVIDENCE_ONLY = "EVIDENCE"  # Only Agent 2 (Primary Domain Search & Trust Scoring)
+    REDTEAM_ONLY = "REDTEAM"    # Only Agent 3 (Adversarial Fallacy & Bias Audit)
+
+
 class VerdictType(str, Enum):
     VERIFIED_TRUE = "VERIFIED_TRUE"
     VERIFIED_FALSE = "VERIFIED_FALSE"
@@ -84,6 +91,7 @@ class ResearchDossier(BaseModel):
     query_id: str
     timestamp: str
     raw_query: str
+    execution_mode: ExecutionMode = ExecutionMode.PIPELINE
     claims_analyzed: int
     overall_verdict: VerdictType
     overall_confidence: float = Field(..., ge=0.0, le=1.0)

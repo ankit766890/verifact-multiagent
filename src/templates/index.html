@@ -18,7 +18,6 @@
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --accent-purple: #a855f7;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
@@ -34,15 +33,9 @@
       align-items: center;
     }
 
-    .container {
-      width: 100%;
-      max-width: 960px;
-    }
+    .container { width: 100%; max-width: 960px; }
 
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+    header { text-align: center; margin-bottom: 2rem; }
 
     .badge-top {
       display: inline-block;
@@ -68,19 +61,42 @@
       margin-bottom: 0.5rem;
     }
 
-    header p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 650px;
-      margin: 0 auto;
+    header p { color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto; }
+
+    /* Interactive Agent Mode Selector */
+    .mode-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1rem 0;
+      flex-wrap: wrap;
     }
 
-    /* Agent Architecture Pipeline visualization */
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* Pipeline Visualization */
     .pipeline-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.75rem;
-      margin: 1.75rem 0;
+      margin-bottom: 1.75rem;
     }
 
     .agent-pill {
@@ -90,8 +106,6 @@
       padding: 0.85rem;
       text-align: left;
       transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
     }
 
     .agent-pill.active {
@@ -107,11 +121,7 @@
       margin-bottom: 0.2rem;
     }
 
-    .agent-pill .agent-name {
-      font-size: 0.85rem;
-      font-weight: 650;
-      color: #fff;
-    }
+    .agent-pill .agent-name { font-size: 0.85rem; font-weight: 650; color: #fff; }
 
     .glass-card {
       background: var(--card-bg);
@@ -124,12 +134,7 @@
       margin-bottom: 2rem;
     }
 
-    label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
-    }
+    label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
 
     textarea {
       width: 100%;
@@ -145,11 +150,7 @@
       transition: all 0.2s;
     }
 
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 10px var(--primary-glow);
-    }
+    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
 
     .btn-row {
       display: flex;
@@ -175,14 +176,7 @@
       transition: transform 0.15s, opacity 0.15s;
     }
 
-    .btn-submit:hover {
-      transform: translateY(-1px);
-      opacity: 0.95;
-    }
-
-    .btn-submit:active {
-      transform: translateY(0);
-    }
+    .btn-submit:hover { transform: translateY(-1px); opacity: 0.95; }
 
     .quick-chips {
       font-size: 0.82rem;
@@ -200,19 +194,13 @@
       padding: 0.25rem 0.65rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s;
       color: var(--primary);
     }
 
-    .chip:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: var(--primary);
-    }
+    .chip:hover { background: rgba(56, 189, 248, 0.15); border-color: var(--primary); }
 
-    /* Results layout */
-    #resultsPanel {
-      display: none;
-    }
+    /* Results */
+    #resultsPanel { display: none; }
 
     .verdict-header {
       border-radius: 10px;
@@ -227,16 +215,10 @@
     .verdict-true { background: rgba(16, 185, 129, 0.15); border-left-color: var(--success); color: #6ee7b7; }
     .verdict-false { background: rgba(239, 68, 68, 0.15); border-left-color: var(--danger); color: #fca5a5; }
     .verdict-misleading { background: rgba(245, 158, 11, 0.15); border-left-color: var(--warning); color: #fde047; }
+    .verdict-context { background: rgba(56, 189, 248, 0.15); border-left-color: var(--primary); color: #7dd3fc; }
 
-    .confidence-gauge {
-      text-align: right;
-    }
-
-    .confidence-number {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-    }
+    .confidence-gauge { text-align: right; }
+    .confidence-number { font-size: 1.8rem; font-weight: 800; color: #fff; }
 
     .claim-card {
       background: rgba(12, 17, 33, 0.6);
@@ -246,12 +228,7 @@
       margin-bottom: 1.25rem;
     }
 
-    .claim-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: #fff;
-    }
+    .claim-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
 
     .fallacy-box {
       background: rgba(245, 158, 11, 0.08);
@@ -299,11 +276,7 @@
       color: var(--text-muted);
     }
 
-    .actions-bar {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
+    .actions-bar { display: flex; gap: 0.75rem; margin-top: 1rem; }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08);
@@ -319,9 +292,7 @@
       gap: 0.4rem;
     }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
 
     @media (max-width: 640px) {
       .pipeline-bar { grid-template-columns: 1fr; }
@@ -335,23 +306,39 @@
     <header>
       <div class="badge-top">Hacktoskill Competition Track: PS03</div>
       <h1>VeriFact Multi-Agent Engine</h1>
-      <p>Autonomous research, claim deconstruction, domain trust scoring, and adversarial red-teaming verification.</p>
+      <p>Autonomous research, claim deconstruction, domain trust scoring, and adversarial red-teaming.</p>
       
+      <!-- Interactive Execution Mode Switcher -->
+      <div class="mode-bar" aria-label="Execution Mode Switcher">
+        <button type="button" class="mode-btn active" id="modeBtnPipeline" onclick="setMode('PIPELINE')">
+          ⚡ Full Pipeline (All 4 Agents)
+        </button>
+        <button type="button" class="mode-btn" id="modeBtnPlanner" onclick="setMode('PLANNER')">
+          🔍 Agent 1: Lead Planner Only
+        </button>
+        <button type="button" class="mode-btn" id="modeBtnEvidence" onclick="setMode('EVIDENCE')">
+          📚 Agent 2: Evidence Hub Only
+        </button>
+        <button type="button" class="mode-btn" id="modeBtnRedteam" onclick="setMode('REDTEAM')">
+          🛡️ Agent 3: Red-Team Only
+        </button>
+      </div>
+
       <!-- Live 4-Agent Pipeline -->
       <div class="pipeline-bar" aria-label="Agent Execution Architecture">
         <div class="agent-pill active" id="agent1Pill">
           <div class="step-num">Agent 01</div>
           <div class="agent-name">Lead Planner</div>
         </div>
-        <div class="agent-pill" id="agent2Pill">
+        <div class="agent-pill active" id="agent2Pill">
           <div class="step-num">Agent 02</div>
           <div class="agent-name">Evidence Hub</div>
         </div>
-        <div class="agent-pill" id="agent3Pill">
+        <div class="agent-pill active" id="agent3Pill">
           <div class="step-num">Agent 03</div>
           <div class="agent-name">Red-Team Verifier</div>
         </div>
-        <div class="agent-pill" id="agent4Pill">
+        <div class="agent-pill active" id="agent4Pill">
           <div class="step-num">Agent 04</div>
           <div class="agent-name">Chief Synthesizer</div>
         </div>
@@ -361,7 +348,7 @@
     <section class="glass-card" aria-labelledby="querySection">
       <h2 id="querySection" style="display:none">Query Submission</h2>
       <form id="verifyForm">
-        <label for="statementInput">Submit Statement, News Headline, or Complex Article to Verify:</label>
+        <label for="statementInput">Submit Statement, News Headline, or Complex Article to Investigate:</label>
         <textarea
           id="statementInput"
           name="statement"
@@ -372,16 +359,16 @@
         
         <div class="btn-row">
           <button type="submit" class="btn-submit" id="submitBtn">
-            <span>Investigate Claims</span>
+            <span id="btnText">Investigate Claims</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
           <span id="pipelineSpinner" style="display:none; color: var(--primary); font-size: 0.9rem;">
-            Executing multi-agent verification pipeline...
+            Executing selected agent configuration...
           </span>
         </div>
 
         <div class="quick-chips">
-          <span>Quick Benchmark Prompts:</span>
+          <span>Benchmark Queries:</span>
           <button type="button" class="chip" onclick="loadSample(1)">NASA Apollo Moon Landing</button>
           <button type="button" class="chip" onclick="loadSample(2)">Vaccines & Medical Science</button>
           <button type="button" class="chip" onclick="loadSample(3)">Flat Earth Conspiracy</button>
@@ -412,7 +399,7 @@
         </button>
       </div>
 
-      <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.15rem;">Deconstructed Propositions & Adversarial Scrutiny</h3>
+      <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.15rem;">Agent Findings & Evidence Dossier</h3>
       <div id="claimsContainer"></div>
 
       <h4 style="margin: 1.5rem 0 0.5rem 0; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted);">
@@ -424,6 +411,7 @@
 
   <script>
     let currentDossier = null;
+    let selectedMode = 'PIPELINE';
 
     const samples = {
       1: "NASA Apollo 11 landed humans on the Moon in July 1969 and left laser retroreflectors behind.",
@@ -434,6 +422,26 @@
 
     function loadSample(num) {
       document.getElementById('statementInput').value = samples[num];
+    }
+
+    function setMode(mode) {
+      selectedMode = mode;
+      ['Pipeline', 'Planner', 'Evidence', 'Redteam'].forEach(m => {
+        const btn = document.getElementById(`modeBtn${m}`);
+        if (btn) btn.classList.toggle('active', m.toUpperCase() === mode);
+      });
+
+      // Update pills
+      document.getElementById('agent1Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
+      document.getElementById('agent2Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
+      document.getElementById('agent3Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
+      document.getElementById('agent4Pill').classList.toggle('active', mode === 'PIPELINE');
+
+      const btnText = document.getElementById('btnText');
+      if (mode === 'PLANNER') btnText.innerText = 'Run Planner Agent';
+      else if (mode === 'EVIDENCE') btnText.innerText = 'Run Evidence Hub';
+      else if (mode === 'REDTEAM') btnText.innerText = 'Run Red-Team Verifier';
+      else btnText.innerText = 'Investigate Claims (All 4)';
     }
 
     document.getElementById('verifyForm').addEventListener('submit', async (e) => {
@@ -447,13 +455,12 @@
 
       submitBtn.disabled = true;
       spinner.style.display = 'inline';
-      highlightPipeline(1);
 
       try {
         const res = await fetch('/api/v1/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ statement: query })
+          body: JSON.stringify({ statement: query, mode: selectedMode })
         });
 
         if (!res.ok) {
@@ -468,23 +475,8 @@
       } finally {
         submitBtn.disabled = false;
         spinner.style.display = 'none';
-        resetPipeline();
       }
     });
-
-    function highlightPipeline(step) {
-      for (let i = 1; i <= 4; i++) {
-        const pill = document.getElementById(`agent${i}Pill`);
-        if (pill) pill.classList.toggle('active', i === step);
-      }
-    }
-
-    function resetPipeline() {
-      for (let i = 1; i <= 4; i++) {
-        const pill = document.getElementById(`agent${i}Pill`);
-        if (pill) pill.classList.add('active');
-      }
-    }
 
     function renderDossier(d) {
       const resultsPanel = document.getElementById('resultsPanel');
@@ -497,10 +489,11 @@
 
       vHeader.className = 'verdict-header ' + (
         d.overall_verdict === 'VERIFIED_TRUE' ? 'verdict-true' :
-        d.overall_verdict === 'VERIFIED_FALSE' ? 'verdict-false' : 'verdict-misleading'
+        d.overall_verdict === 'VERIFIED_FALSE' ? 'verdict-false' :
+        d.overall_verdict === 'CONTEXT_REQUIRED' ? 'verdict-context' : 'verdict-misleading'
       );
 
-      vTitle.innerText = d.overall_verdict.replace('_', ' ');
+      vTitle.innerText = d.overall_verdict.replace('_', ' ') + ` [Mode: ${d.execution_mode}]`;
       vSummary.innerText = d.executive_summary;
       confVal.innerText = Math.round(d.overall_confidence * 100) + '%';
 
@@ -540,10 +533,7 @@
             Category: <strong>${cl.topic_category}</strong> | Epistemic Status: <strong>${cl.epistemic_certainty}</strong>
           </div>
           ${fallacyHtml}
-          <div style="margin-top: 0.5rem;">
-            <strong style="font-size: 0.85rem; color: #fff;">Verified Primary Evidence:</strong>
-            ${sourcesHtml}
-          </div>
+          ${sourcesHtml ? `<div style="margin-top: 0.5rem;"><strong style="font-size: 0.85rem; color: #fff;">Verified Primary Evidence:</strong>${sourcesHtml}</div>` : ''}
         `;
         container.appendChild(card);
       });

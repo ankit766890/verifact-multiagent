@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 from src.core.config import settings
 from src.agents.orchestrator import Orchestrator
-from src.models.schemas import ResearchDossier
+from src.models.schemas import ResearchDossier, ExecutionMode
 
 
 app = FastAPI(
@@ -34,6 +34,10 @@ class FactCheckRequest(BaseModel):
         description="Factual statement or claim to investigate",
         examples=["NASA Apollo 11 landed humans on the Moon in 1969."]
     )
+    mode: ExecutionMode = Field(
+        default=ExecutionMode.PIPELINE,
+        description="Execution mode: PIPELINE (all 4 agents), PLANNER, EVIDENCE, or REDTEAM"
+    )
 
 
 @app.get("/health", tags=["System"])
@@ -43,6 +47,7 @@ def health_check():
         "status": "healthy",
         "service": settings.APP_NAME,
         "version": settings.APP_VERSION,
+        "supported_modes": ["PIPELINE", "PLANNER", "EVIDENCE", "REDTEAM"],
         "agents": ["LeadPlannerAgent", "EvidenceHubAgent", "RedTeamVerifierAgent", "ChiefSynthesizerAgent"]
     }
 
@@ -50,11 +55,11 @@ def health_check():
 @app.post("/api/v1/verify", response_model=ResearchDossier, tags=["Fact-Checking"])
 def verify_statement(request: FactCheckRequest):
     """
-    Submits a query to the multi-agent pipeline for claim deconstruction,
-    evidence retrieval, adversarial cross-examination, and synthesis.
+    Submits a query to the multi-agent pipeline.
+    Supports running all agents cooperatively or targeting an isolated agent.
     """
     try:
-        dossier = orchestrator.run(request.statement)
+        dossier = orchestrator.run(request.statement, mode=request.mode)
         return dossier
     except ValueError as val_err:
         raise HTTPException(
