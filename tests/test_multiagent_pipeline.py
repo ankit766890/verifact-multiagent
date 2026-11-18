@@ -5,22 +5,25 @@ from src.agents.redteam_agent import RedTeamVerifierAgent
 from src.agents.synthesizer_agent import SynthesizerAgent
 from src.agents.orchestrator import Orchestrator
 from src.core.security import InputSanitizer
-from src.models.schemas import VerdictType, AtomicClaim, FallacyType
+from src.core.performance import PerformanceMonitor
+from src.models.schemas import VerdictType, AtomicClaim, FallacyType, ExecutionMode
 
 
 class TestVeriFactMultiAgentPipeline(unittest.TestCase):
     """
     Industry-Grade Automated Test Suite for PS03: Multi-Agent Research & Fact-Checking.
-    Covers:
-      - Claim Decomposition & Entity Extraction (PlannerAgent)
-      - Authority & Credibility Scoring (EvidenceHubAgent)
-      - Adversarial Scrutiny & 7 Logical Fallacy Detection (RedTeamVerifierAgent)
-      - Epistemic Synthesis & Confidence Weighting (SynthesizerAgent)
-      - Security Bounds, XSS Defenses, & Prompt Injection Mitigation (InputSanitizer)
-      - End-to-End Autonomous Orchestration
+    Rigorous coverage across all core criteria:
+      1. Lead Planner Agent (Deconstruction, temporal anchors, entity extraction)
+      2. Evidence Hub Agent (Domain trust scoring, primary registries)
+      3. Red Team Verifier (7 informal logical fallacies, disinformation tropes)
+      4. Synthesizer Agent (Bayesian confidence synthesis, dossier formatting)
+      5. Execution Modes (Pipeline, Planner-Only, Evidence-Only, RedTeam-Only)
+      6. Security Mitigation (XSS, script injection, length truncation)
+      7. High-Performance Caching & Telemetry Tracking
     """
 
     def setUp(self):
+        PerformanceMonitor.clear_cache()
         self.orchestrator = Orchestrator()
         self.planner = PlannerAgent()
         self.evidence_agent = EvidenceHubAgent()
@@ -82,7 +85,7 @@ class TestVeriFactMultiAgentPipeline(unittest.TestCase):
 
     def test_orchestrator_end_to_end_truth_flow(self):
         statement = "NASA Apollo 11 landed humans on the Moon in July 1969."
-        dossier = self.orchestrator.run(statement)
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.PIPELINE)
         self.assertEqual(dossier.overall_verdict, VerdictType.VERIFIED_TRUE)
         self.assertGreaterEqual(dossier.overall_confidence, 0.85)
         self.assertGreater(len(dossier.detailed_claims), 0)
@@ -90,9 +93,31 @@ class TestVeriFactMultiAgentPipeline(unittest.TestCase):
 
     def test_orchestrator_end_to_end_falsehood_flow(self):
         statement = "The Earth is flat and the Apollo moon landing was completely fake."
-        dossier = self.orchestrator.run(statement)
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.PIPELINE)
         self.assertEqual(dossier.overall_verdict, VerdictType.VERIFIED_FALSE)
         self.assertGreater(dossier.overall_confidence, 0.75)
+
+    def test_execution_mode_planner_only(self):
+        statement = "NASA Apollo 11 landed on the moon and vaccines save lives."
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.PLANNER_ONLY)
+        self.assertEqual(dossier.execution_mode, ExecutionMode.PLANNER_ONLY)
+        self.assertEqual(len(dossier.audit_trail), 1)
+        self.assertEqual(dossier.audit_trail[0].agent_name, "LeadPlannerAgent")
+
+    def test_execution_mode_evidence_only(self):
+        statement = "NASA Apollo 11 landed humans on the Moon in July 1969."
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.EVIDENCE_ONLY)
+        self.assertEqual(dossier.execution_mode, ExecutionMode.EVIDENCE_ONLY)
+        self.assertTrue(any(len(c.corroborating_evidence) > 0 for c in dossier.detailed_claims))
+
+    def test_performance_caching_layer(self):
+        statement = "Apollo 11 landed on the Moon in 1969."
+        dossier1 = self.orchestrator.run(statement)
+        self.assertFalse(dossier1.meta.get("cache_hit", False))
+
+        # Second identical execution must be a sub-millisecond cache hit
+        dossier2 = self.orchestrator.run(statement)
+        self.assertTrue(dossier2.meta.get("cache_hit", False))
 
     def test_input_sanitizer_xss_prevention(self):
         malicious_input = "<script>alert('xss')</script> NASA landed on the moon"

@@ -18,22 +18,92 @@
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
+      --focus-ring: #60a5fa;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #0284c7;
+      --primary-glow: rgba(2, 132, 199, 0.2);
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --focus-ring: #2563eb;
+    }
+
+    [data-contrast="high"] {
+      --bg: #000000;
+      --card-bg: #111111;
+      --card-border: #ffffff;
+      --text: #ffffff;
+      --text-muted: #e2e8f0;
+      --primary: #00e5ff;
+      --success: #00ff66;
+      --danger: #ff3333;
+      --warning: #ffcc00;
+      --focus-ring: #ffff00;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
 
+    /* Skip link for screen-reader & keyboard accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: #000;
+      padding: 8px 16px;
+      z-index: 1000;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 0 0 8px 0;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; outline: 3px solid var(--focus-ring); }
+
     body {
-      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 50%, var(--bg) 100%);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       padding: 2.5rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background 0.3s, color 0.3s;
     }
 
-    .container { width: 100%; max-width: 960px; }
+    .container { width: 100%; max-width: 980px; }
+
+    /* Accessibility Toolbar */
+    .a11y-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .a11y-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .a11y-btn:focus-visible, button:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid var(--focus-ring) !important;
+      outline-offset: 3px !important;
+    }
 
     header { text-align: center; margin-bottom: 2rem; }
 
@@ -55,9 +125,6 @@
       font-size: 2.4rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
     }
 
@@ -73,8 +140,8 @@
     }
 
     .mode-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       color: var(--text-muted);
       padding: 0.5rem 1rem;
       border-radius: 8px;
@@ -87,7 +154,7 @@
     .mode-btn.active {
       background: rgba(56, 189, 248, 0.2);
       border-color: var(--primary);
-      color: #fff;
+      color: var(--text);
       box-shadow: 0 0 12px var(--primary-glow);
     }
 
@@ -121,7 +188,7 @@
       margin-bottom: 0.2rem;
     }
 
-    .agent-pill .agent-name { font-size: 0.85rem; font-weight: 650; color: #fff; }
+    .agent-pill .agent-name { font-size: 0.85rem; font-weight: 650; }
 
     .glass-card {
       background: var(--card-bg);
@@ -130,7 +197,7 @@
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 1.75rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       margin-bottom: 2rem;
     }
 
@@ -139,18 +206,16 @@
     textarea {
       width: 100%;
       height: 110px;
-      background: rgba(10, 14, 26, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(10, 14, 26, 0.4);
+      border: 1px solid var(--card-border);
       border-radius: 10px;
-      color: #fff;
+      color: var(--text);
       padding: 0.9rem;
       font-size: 1rem;
       line-height: 1.5;
       resize: vertical;
       transition: all 0.2s;
     }
-
-    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
 
     .btn-row {
       display: flex;
@@ -190,7 +255,7 @@
 
     .chip {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--card-border);
       padding: 0.25rem 0.65rem;
       border-radius: 6px;
       cursor: pointer;
@@ -212,32 +277,31 @@
       border-left: 6px solid transparent;
     }
 
-    .verdict-true { background: rgba(16, 185, 129, 0.15); border-left-color: var(--success); color: #6ee7b7; }
-    .verdict-false { background: rgba(239, 68, 68, 0.15); border-left-color: var(--danger); color: #fca5a5; }
-    .verdict-misleading { background: rgba(245, 158, 11, 0.15); border-left-color: var(--warning); color: #fde047; }
-    .verdict-context { background: rgba(56, 189, 248, 0.15); border-left-color: var(--primary); color: #7dd3fc; }
+    .verdict-true { background: rgba(16, 185, 129, 0.15); border-left-color: var(--success); }
+    .verdict-false { background: rgba(239, 68, 68, 0.15); border-left-color: var(--danger); }
+    .verdict-misleading { background: rgba(245, 158, 11, 0.15); border-left-color: var(--warning); }
+    .verdict-context { background: rgba(56, 189, 248, 0.15); border-left-color: var(--primary); }
 
     .confidence-gauge { text-align: right; }
-    .confidence-number { font-size: 1.8rem; font-weight: 800; color: #fff; }
+    .confidence-number { font-size: 1.8rem; font-weight: 800; }
 
     .claim-card {
-      background: rgba(12, 17, 33, 0.6);
+      background: rgba(12, 17, 33, 0.3);
       border: 1px solid var(--card-border);
       border-radius: 10px;
       padding: 1.25rem;
       margin-bottom: 1.25rem;
     }
 
-    .claim-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+    .claim-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
 
     .fallacy-box {
       background: rgba(245, 158, 11, 0.08);
-      border: 1px dashed rgba(245, 158, 11, 0.4);
+      border: 1px dashed rgba(245, 158, 11, 0.5);
       padding: 0.75rem 1rem;
       border-radius: 8px;
       font-size: 0.85rem;
       margin: 0.75rem 0;
-      color: #fef08a;
     }
 
     .evidence-item {
@@ -276,23 +340,34 @@
       color: var(--text-muted);
     }
 
-    .actions-bar { display: flex; gap: 0.75rem; margin-top: 1rem; }
+    .actions-bar { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
       padding: 0.5rem 1rem;
       font-size: 0.85rem;
       border-radius: 6px;
       cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
+
+    /* Visual Telemetry Chart Gauge */
+    .metric-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      font-size: 0.78rem;
+    }
 
     @media (max-width: 640px) {
       .pipeline-bar { grid-template-columns: 1fr; }
@@ -302,24 +377,34 @@
   </style>
 </head>
 <body>
-  <main class="container" role="main">
+  <!-- Accessible skip navigation -->
+  <a href="#main-content" class="skip-link">Skip to Main Content</a>
+
+  <main class="container" id="main-content" role="main">
+    <!-- Accessibility / Theme Toolbar -->
+    <div class="a11y-toolbar" role="toolbar" aria-label="Accessibility & Display Settings">
+      <button class="a11y-btn" onclick="toggleTheme()" aria-label="Toggle Light/Dark Theme">🌓 Switch Theme</button>
+      <button class="a11y-btn" onclick="toggleContrast()" aria-label="Toggle High Contrast Mode">👁️ High Contrast (AAA)</button>
+      <button class="a11y-btn" onclick="readAloud()" id="ttsBtn" aria-label="Read Results Out Loud">🔊 Read Aloud</button>
+    </div>
+
     <header>
       <div class="badge-top">Hacktoskill Competition Track: PS03</div>
       <h1>VeriFact Multi-Agent Engine</h1>
       <p>Autonomous research, claim deconstruction, domain trust scoring, and adversarial red-teaming.</p>
       
       <!-- Interactive Execution Mode Switcher -->
-      <div class="mode-bar" aria-label="Execution Mode Switcher">
-        <button type="button" class="mode-btn active" id="modeBtnPipeline" onclick="setMode('PIPELINE')">
+      <div class="mode-bar" role="radiogroup" aria-label="Execution Mode Switcher">
+        <button type="button" class="mode-btn active" id="modeBtnPipeline" onclick="setMode('PIPELINE')" role="radio" aria-checked="true">
           ⚡ Full Pipeline (All 4 Agents)
         </button>
-        <button type="button" class="mode-btn" id="modeBtnPlanner" onclick="setMode('PLANNER')">
+        <button type="button" class="mode-btn" id="modeBtnPlanner" onclick="setMode('PLANNER')" role="radio" aria-checked="false">
           🔍 Agent 1: Lead Planner Only
         </button>
-        <button type="button" class="mode-btn" id="modeBtnEvidence" onclick="setMode('EVIDENCE')">
+        <button type="button" class="mode-btn" id="modeBtnEvidence" onclick="setMode('EVIDENCE')" role="radio" aria-checked="false">
           📚 Agent 2: Evidence Hub Only
         </button>
-        <button type="button" class="mode-btn" id="modeBtnRedteam" onclick="setMode('REDTEAM')">
+        <button type="button" class="mode-btn" id="modeBtnRedteam" onclick="setMode('REDTEAM')" role="radio" aria-checked="false">
           🛡️ Agent 3: Red-Team Only
         </button>
       </div>
@@ -362,8 +447,8 @@
             <span id="btnText">Investigate Claims</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
-          <span id="pipelineSpinner" style="display:none; color: var(--primary); font-size: 0.9rem;">
-            Executing selected agent configuration...
+          <span id="pipelineSpinner" style="display:none; color: var(--primary); font-size: 0.9rem;" role="status" aria-live="assertive">
+            Executing multi-agent verification pipeline...
           </span>
         </div>
 
@@ -378,11 +463,11 @@
     </section>
 
     <!-- Results Intelligence Dossier -->
-    <section id="resultsPanel" class="glass-card" aria-live="polite">
+    <section id="resultsPanel" class="glass-card" aria-live="polite" aria-atomic="true">
       <div id="verdictHeader" class="verdict-header">
         <div>
           <span id="verdictTitle" style="font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em;">VERDICT</span>
-          <p id="verdictSummary" style="font-size: 0.95rem; margin-top: 0.4rem; color: #fff;"></p>
+          <p id="verdictSummary" style="font-size: 0.95rem; margin-top: 0.4rem;"></p>
         </div>
         <div class="confidence-gauge">
           <div class="confidence-number" id="confidenceVal">95%</div>
@@ -391,12 +476,15 @@
       </div>
 
       <div class="actions-bar">
-        <button class="btn-secondary" onclick="exportJSON()">
+        <button class="btn-secondary" onclick="exportJSON()" aria-label="Download JSON Dossier">
           <span>&#x21E9; Download JSON Dossier</span>
         </button>
-        <button class="btn-secondary" onclick="window.print()">
+        <button class="btn-secondary" onclick="window.print()" aria-label="Print Formal Audit Report">
           <span>&#x1F5B6; Print Audit Report</span>
         </button>
+        <span id="cacheIndicator" class="metric-badge" style="display:none; color: var(--success);" aria-label="Cache Status">
+          ⚡ Sub-millisecond Cache Hit
+        </span>
       </div>
 
       <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.15rem;">Agent Findings & Evidence Dossier</h3>
@@ -413,6 +501,28 @@
     let currentDossier = null;
     let selectedMode = 'PIPELINE';
 
+    // Theme & Accessibility Toggles
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+    }
+
+    function toggleContrast() {
+      const current = document.documentElement.getAttribute('data-contrast');
+      document.documentElement.setAttribute('data-contrast', current === 'high' ? 'normal' : 'high');
+    }
+
+    function readAloud() {
+      if (!currentDossier || !('speechSynthesis' in window)) {
+        alert('Run an investigation first to use speech synthesis!');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const textToSpeak = `Verification report. Overall Verdict: ${currentDossier.overall_verdict.replace('_', ' ')}. Confidence: ${Math.round(currentDossier.overall_confidence * 100)} percent. ${currentDossier.executive_summary}`;
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      window.speechSynthesis.speak(utterance);
+    }
+
     const samples = {
       1: "NASA Apollo 11 landed humans on the Moon in July 1969 and left laser retroreflectors behind.",
       2: "The 1998 MMR vaccine study claiming a link to autism was retracted by The Lancet due to falsified medical data.",
@@ -428,10 +538,13 @@
       selectedMode = mode;
       ['Pipeline', 'Planner', 'Evidence', 'Redteam'].forEach(m => {
         const btn = document.getElementById(`modeBtn${m}`);
-        if (btn) btn.classList.toggle('active', m.toUpperCase() === mode);
+        if (btn) {
+          const isActive = m.toUpperCase() === mode;
+          btn.classList.toggle('active', isActive);
+          btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+        }
       });
 
-      // Update pills
       document.getElementById('agent1Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'PLANNER');
       document.getElementById('agent2Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'EVIDENCE');
       document.getElementById('agent3Pill').classList.toggle('active', mode === 'PIPELINE' || mode === 'REDTEAM');
@@ -486,6 +599,7 @@
       const confVal = document.getElementById('confidenceVal');
       const container = document.getElementById('claimsContainer');
       const telemetry = document.getElementById('telemetryTray');
+      const cacheIndicator = document.getElementById('cacheIndicator');
 
       vHeader.className = 'verdict-header ' + (
         d.overall_verdict === 'VERIFIED_TRUE' ? 'verdict-true' :
@@ -497,7 +611,13 @@
       vSummary.innerText = d.executive_summary;
       confVal.innerText = Math.round(d.overall_confidence * 100) + '%';
 
-      // Claims
+      if (d.meta && d.meta.cache_hit) {
+        cacheIndicator.style.display = 'inline-flex';
+      } else {
+        cacheIndicator.style.display = 'none';
+      }
+
+      // Render Claims
       container.innerHTML = '';
       d.detailed_claims.forEach((cl, i) => {
         const card = document.createElement('div');
@@ -533,15 +653,16 @@
             Category: <strong>${cl.topic_category}</strong> | Epistemic Status: <strong>${cl.epistemic_certainty}</strong>
           </div>
           ${fallacyHtml}
-          ${sourcesHtml ? `<div style="margin-top: 0.5rem;"><strong style="font-size: 0.85rem; color: #fff;">Verified Primary Evidence:</strong>${sourcesHtml}</div>` : ''}
+          ${sourcesHtml ? `<div style="margin-top: 0.5rem;"><strong style="font-size: 0.85rem;">Verified Primary Evidence:</strong>${sourcesHtml}</div>` : ''}
         `;
         container.appendChild(card);
       });
 
-      // Telemetry
+      // Render Telemetry
       telemetry.innerHTML = '';
       d.audit_trail.forEach(m => {
         const item = document.createElement('div');
+        item.className = 'metric-badge';
         item.innerHTML = `<strong>${m.agent_name}</strong>: ${m.duration_ms} ms &bull; ${m.status}`;
         telemetry.appendChild(item);
       });

@@ -15,12 +15,13 @@ from src.models.schemas import (
     FallacyType
 )
 from src.core.security import InputSanitizer
+from src.core.performance import PerformanceMonitor
 
 
 class Orchestrator:
     """
     Central Coordinator managing multi-agent pipelining, verification fan-out,
-    agent execution mode switching, and end-to-end telemetry tracking.
+    agent execution mode switching, LRU caching, and end-to-end telemetry tracking.
     """
 
     def __init__(self):
@@ -30,14 +31,25 @@ class Orchestrator:
         self.synthesizer = SynthesizerAgent()
 
     def run(self, query: str, mode: ExecutionMode = ExecutionMode.PIPELINE) -> ResearchDossier:
-        audit_trail: List[PipelineExecutionMetric] = []
         cleaned_query = InputSanitizer.clean_text(query)
         now_iso = datetime.now(timezone.utc).isoformat()
 
         if not InputSanitizer.validate_claim_text(cleaned_query):
             raise ValueError("Input statement failed security validation, contains forbidden syntax, or is empty.")
 
-        # Stage 1: Lead Planner Agent (Always runs to deconstruct propositions)
+        # Performance Optimization: High-Efficiency Caching Layer
+        cache_key = f"{mode.value}::{cleaned_query.lower()}"
+        cached_dossier = PerformanceMonitor.get_cached(cache_key)
+        if cached_dossier is not None:
+            # Return cached dossier with fresh timestamp and cache hit indicator
+            dossier_copy = cached_dossier.model_copy(deep=True)
+            dossier_copy.timestamp = now_iso
+            dossier_copy.meta["cache_hit"] = True
+            return dossier_copy
+
+        audit_trail: List[PipelineExecutionMetric] = []
+
+        # Stage 1: Lead Planner Agent (Deconstructs propositions)
         claims, metric_planner = self.planner.run_with_telemetry(cleaned_query, {})
         audit_trail.append(metric_planner)
 
@@ -62,7 +74,7 @@ class Orchestrator:
                 )
                 for c in claims
             ]
-            return ResearchDossier(
+            dossier = ResearchDossier(
                 query_id=f"DOS-PLAN-{uuid.uuid4().hex[:6].upper()}",
                 timestamp=now_iso,
                 raw_query=cleaned_query,
@@ -74,8 +86,10 @@ class Orchestrator:
                 executive_summary=f"Lead Planner isolated {len(claims)} atomic proposition(s) across categories: {', '.join(set(c.topic_category for c in claims))}.",
                 detailed_claims=detailed,
                 audit_trail=audit_trail,
-                meta={"mode": "PLANNER_ONLY", "isolated_entities": [e for c in claims for e in c.entities]}
+                meta={"mode": "PLANNER_ONLY", "isolated_entities": [e for c in claims for e in c.entities], "cache_hit": False}
             )
+            PerformanceMonitor.set_cache(cache_key, dossier)
+            return dossier
 
         # Stage 2: Evidence Gathering
         detailed_claims: List[ClaimVerificationResult] = []
@@ -119,7 +133,7 @@ class Orchestrator:
         # MODE: EVIDENCE ONLY RETURN
         if mode == ExecutionMode.EVIDENCE_ONLY:
             total_sources = sum(len(c.corroborating_evidence) for c in detailed_claims)
-            return ResearchDossier(
+            dossier = ResearchDossier(
                 query_id=f"DOS-EVID-{uuid.uuid4().hex[:6].upper()}",
                 timestamp=now_iso,
                 raw_query=cleaned_query,
@@ -131,13 +145,15 @@ class Orchestrator:
                 executive_summary=f"Evidence Hub retrieved {total_sources} primary source citations with authority trust scoring.",
                 detailed_claims=detailed_claims,
                 audit_trail=audit_trail,
-                meta={"mode": "EVIDENCE_ONLY", "sources_retrieved": total_sources}
+                meta={"mode": "EVIDENCE_ONLY", "sources_retrieved": total_sources, "cache_hit": False}
             )
+            PerformanceMonitor.set_cache(cache_key, dossier)
+            return dossier
 
         # MODE: RED TEAM ONLY RETURN
         if mode == ExecutionMode.REDTEAM_ONLY:
             fallacies_found = sum(1 for c in detailed_claims if c.fallacy_analysis.detected)
-            return ResearchDossier(
+            dossier = ResearchDossier(
                 query_id=f"DOS-REDT-{uuid.uuid4().hex[:6].upper()}",
                 timestamp=now_iso,
                 raw_query=cleaned_query,
@@ -149,8 +165,10 @@ class Orchestrator:
                 executive_summary=f"Red-Team Examiner completed adversarial stress-testing. Identified {fallacies_found} informal cognitive/logical fallacy indicator(s).",
                 detailed_claims=detailed_claims,
                 audit_trail=audit_trail,
-                meta={"mode": "REDTEAM_ONLY", "fallacies_count": fallacies_found}
+                meta={"mode": "REDTEAM_ONLY", "fallacies_count": fallacies_found, "cache_hit": False}
             )
+            PerformanceMonitor.set_cache(cache_key, dossier)
+            return dossier
 
         # MODE: FULL COOPERATIVE PIPELINE (Default)
         dossier, metric_synth = self.synthesizer.run_with_telemetry({
@@ -161,5 +179,7 @@ class Orchestrator:
         audit_trail.append(metric_synth)
         dossier.execution_mode = ExecutionMode.PIPELINE
         dossier.audit_trail = audit_trail
+        dossier.meta["cache_hit"] = False
 
+        PerformanceMonitor.set_cache(cache_key, dossier)
         return dossier
