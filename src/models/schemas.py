@@ -4,10 +4,14 @@ from pydantic import BaseModel, Field
 
 
 class ExecutionMode(str, Enum):
-    PIPELINE = "PIPELINE"       # All 4 agents work cooperatively
-    PLANNER_ONLY = "PLANNER"    # Only Agent 1 (Decomposition & Entity Extraction)
-    EVIDENCE_ONLY = "EVIDENCE"  # Only Agent 2 (Primary Domain Search & Trust Scoring)
-    REDTEAM_ONLY = "REDTEAM"    # Only Agent 3 (Adversarial Fallacy & Bias Audit)
+    PIPELINE = "PIPELINE"       # 4-Agent Autonomous Swarm
+    PLANNER = "PLANNER"         # Agent 1 (Decomposition & Anchors)
+    EVIDENCE = "EVIDENCE"       # Agent 2 (Domain Reputational Registry)
+    REDTEAM = "REDTEAM"         # Agent 3 (Adversarial Fallacy & Bias Audit)
+    # Aliases for backward compatibility
+    PLANNER_ONLY = "PLANNER"
+    EVIDENCE_ONLY = "EVIDENCE"
+    REDTEAM_ONLY = "REDTEAM"
 
 
 class VerdictType(str, Enum):
@@ -23,7 +27,7 @@ class FallacyType(str, Enum):
     APPEAL_TO_FALSE_AUTHORITY = "Appeal to False Authority"
     FALSE_DILEMMA = "False Dilemma / Bifurcation"
     HASTY_GENERALIZATION = "Hasty Generalization"
-    POST_HOC = "Post Hoc Ergo Propter Hoc (False Cause)"
+    POST_HOC = "Post Hoc Ergo Propter Hoc (Spurious Causation)"
     CIRCULAR_REASONING = "Circular Reasoning (Begging the Question)"
     APPEAL_TO_EMOTION_OR_FEAR = "Sensationalism / Appeal to Emotion"
     NONE_DETECTED = "None Detected"
@@ -44,8 +48,8 @@ class EvidenceSource(BaseModel):
     snippet: str = Field(..., min_length=5, max_length=2000)
     source_type: EvidenceType = Field(default=EvidenceType.TIER1_JOURNALISM)
     credibility_score: float = Field(..., ge=0.0, le=1.0)
-    published_date: Optional[str] = None
     domain: str = ""
+    published_date: Optional[str] = None
 
 
 class AtomicClaim(BaseModel):
@@ -81,10 +85,19 @@ class ClaimVerificationResult(BaseModel):
 
 class PipelineExecutionMetric(BaseModel):
     agent_name: str
+    agent_role: str
     duration_ms: float
     status: str
     items_processed: int
-    memory_footprint_kb: float = 0.0
+
+
+class AgentStreamStep(BaseModel):
+    agent_id: str
+    agent_name: str
+    timestamp: str
+    action: str
+    thought_summary: str
+    detail: str
 
 
 class ResearchDossier(BaseModel):
@@ -99,4 +112,5 @@ class ResearchDossier(BaseModel):
     executive_summary: str
     detailed_claims: List[ClaimVerificationResult]
     audit_trail: List[PipelineExecutionMetric]
+    agent_timeline: List[AgentStreamStep] = Field(default_factory=list)
     meta: Dict[str, Any] = Field(default_factory=dict)
