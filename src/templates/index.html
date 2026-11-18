@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriFact | Multi-Agent Fact-Checking & Research AI</title>
+  <meta name="description" content="Production-grade Multi-Agent Autonomous Research & Fact-Checking System">
+  <!-- Semantic, Accessible, Zero-Dependency Modern CSS -->
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-yellow: #eab308;
+      --border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: var(--accent-blue);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .agent-pipeline-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .agent-tag {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.8rem;
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: #0b1120;
+      color: var(--text-main);
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+
+    .btn-submit {
+      margin-top: 1rem;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+
+    .btn-submit:focus {
+      outline: 3px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+
+    .quick-examples {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .quick-examples span {
+      cursor: pointer;
+      color: var(--accent-blue);
+      text-decoration: underline;
+      margin-right: 0.75rem;
+    }
+
+    /* Results section */
+    #resultsArea {
+      display: none;
+    }
+
+    .verdict-banner {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .verdict-TRUE { background: #064e3b; color: #6ee7b7; border-left: 6px solid var(--accent-green); }
+    .verdict-FALSE { background: #450a0a; color: #fca5a5; border-left: 6px solid var(--accent-red); }
+    .verdict-MISLEADING { background: #422006; color: #fde047; border-left: 6px solid var(--accent-yellow); }
+
+    .claim-item {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .claim-item h4 {
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .evidence-pill {
+      font-size: 0.75rem;
+      background: #1e293b;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-right: 0.5rem;
+      border: 1px solid #334155;
+    }
+
+    .telemetry-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+    }
+
+    .loading-spinner {
+      display: none;
+      color: var(--accent-blue);
+      margin-left: 1rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main">
+    <header>
+      <h1>VeriFact AI Multi-Agent Engine</h1>
+      <p>Autonomous Research, Dynamic Claim Decomposition & Adversarial Fact-Checking</p>
+      <div class="agent-pipeline-tags" aria-label="Autonomous Agents Architecture">
+        <span class="agent-tag" title="Agent 1">1. Planner Agent</span>
+        <span class="agent-tag" title="Agent 2">2. Evidence Hub</span>
+        <span class="agent-tag" title="Agent 3">3. Red-Team Verifier</span>
+        <span class="agent-tag" title="Agent 4">4. Chief Synthesizer</span>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="form-heading">
+      <h2 id="form-heading" style="display:none">Fact-Checking Inquiry Form</h2>
+      <form id="verifyForm">
+        <label for="statementInput">Enter Statement or Article Excerpt to Verify:</label>
+        <textarea
+          id="statementInput"
+          name="statement"
+          required
+          aria-required="true"
+          placeholder="e.g. Apollo 11 moon landings were staged on Earth, but vaccines are proven to eliminate measles globally."
+        ></textarea>
+        
+        <div style="display: flex; align-items: center;">
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span>Investigate Claims</span>
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+          <span class="loading-spinner" id="spinner" role="status" aria-live="polite">Running 4 agents in parallel...</span>
+        </div>
+
+        <div class="quick-examples">
+          Try samples:
+          <span tabindex="0" role="button" onclick="setSample(1)">NASA Moon Landing</span>
+          <span tabindex="0" role="button" onclick="setSample(2)">Vaccines & Health</span>
+          <span tabindex="0" role="button" onclick="setSample(3)">Flat Earth Theory</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- Accessible Dynamic Results Area -->
+    <section id="resultsArea" class="card" aria-live="polite" aria-atomic="true">
+      <div id="verdictBanner" class="verdict-banner">
+        <div>
+          <span id="verdictTitle" style="font-size: 1.25rem;">VERDICT</span>
+          <div id="verdictSummary" style="font-weight: normal; font-size: 0.95rem; margin-top: 0.35rem;"></div>
+        </div>
+        <div id="confidenceBadge" style="font-size: 1.1rem; text-align: right;"></div>
+      </div>
+
+      <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Deconstructed Atomic Claims</h3>
+      <div id="claimsList"></div>
+
+      <div class="telemetry-row" id="telemetryBar" aria-label="Pipeline Telemetry"></div>
+    </section>
+  </main>
+
+  <script>
+    const samples = {
+      1: "NASA Apollo 11 landed humans on the Moon in July 1969 and left retroreflectors behind.",
+      2: "The 1998 MMR vaccine study claiming a link to autism was retracted due to falsified data.",
+      3: "The Earth is flat and space agencies use fish-eye lenses to fake curvature."
+    };
+
+    function setSample(idx) {
+      document.getElementById('statementInput').value = samples[idx];
+    }
+
+    document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('statementInput').value.trim();
+      if (!input) return;
+
+      const spinner = document.getElementById('spinner');
+      const submitBtn = document.getElementById('submitBtn');
+      const resultsArea = document.getElementById('resultsArea');
+      
+      spinner.style.display = 'inline';
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/v1/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ statement: input })
+        });
+
+        if (!response.ok) {
+          throw new Error('Analysis failed with status ' + response.status);
+        }
+
+        const data = await response.json();
+        renderResults(data);
+      } catch (err) {
+        alert('Verification error: ' + err.message);
+      } finally {
+        spinner.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    });
+
+    function renderResults(data) {
+      const resultsArea = document.getElementById('resultsArea');
+      const banner = document.getElementById('verdictBanner');
+      const verdictTitle = document.getElementById('verdictTitle');
+      const verdictSummary = document.getElementById('verdictSummary');
+      const confidenceBadge = document.getElementById('confidenceBadge');
+      const claimsList = document.getElementById('claimsList');
+      const telemetryBar = document.getElementById('telemetryBar');
+
+      banner.className = 'verdict-banner ' + (
+        data.overall_verdict === 'VERIFIED_TRUE' ? 'verdict-TRUE' :
+        data.overall_verdict === 'VERIFIED_FALSE' ? 'verdict-FALSE' : 'verdict-MISLEADING'
+      );
+
+      verdictTitle.innerText = data.overall_verdict.replace('_', ' ');
+      verdictSummary.innerText = data.executive_summary;
+      confidenceBadge.innerHTML = 'Confidence: <strong>' + Math.round(data.overall_confidence * 100) + '%</strong>';
+
+      // Render individual claims
+      claimsList.innerHTML = '';
+      data.detailed_claims.forEach((cl, i) => {
+        const claimDiv = document.createElement('div');
+        claimDiv.className = 'claim-item';
+        
+        let evidenceHtml = '';
+        cl.corroborating_evidence.forEach(ev => {
+          evidenceHtml += `<div style="margin-top: 0.5rem; font-size: 0.85rem;">
+            <a href="${ev.url}" target="_blank" rel="noopener" style="color: var(--accent-blue); text-decoration: underline;">${ev.title}</a>
+            <span class="evidence-pill">${ev.source_type}</span>
+            <span class="evidence-pill">Credibility: ${Math.round(ev.credibility_score * 100)}%</span>
+            <p style="color: var(--text-muted); margin-top: 0.2rem;">${ev.snippet}</p>
+          </div>`;
+        });
+
+        claimDiv.innerHTML = `
+          <h4>Claim #${i + 1}: ${cl.claim_text}</h4>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Adversarial Critique:</strong> ${cl.red_team_critique}</p>
+          <div style="border-top: 1px solid #1e293b; padding-top: 0.5rem;">
+            <strong>Primary Corroborations:</strong>
+            ${evidenceHtml}
+          </div>
+        `;
+        claimsList.appendChild(claimDiv);
+      });
+
+      // Render Telemetry
+      telemetryBar.innerHTML = '';
+      data.audit_trail.forEach(met => {
+        const span = document.createElement('span');
+        span.innerText = `${met.agent_name}: ${met.duration_ms}ms (${met.status})`;
+        telemetryBar.appendChild(span);
+      });
+
+      resultsArea.style.display = 'block';
+      resultsArea.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
