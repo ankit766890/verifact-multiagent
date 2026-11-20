@@ -5,7 +5,7 @@ from src.agents.orchestrator import Orchestrator
 
 def print_banner():
     print("=" * 70)
-    print("   VeriFact Multi-Agent CLI Fact-Checker")
+    print("   VeriFact Multi-Agent CLI Fact-Checker (PS03)")
     print("=" * 70)
 
 
@@ -35,10 +35,15 @@ def main():
         for idx, claim in enumerate(dossier.detailed_claims, 1):
             print(f"[{idx}] Claim: {claim.claim_text}")
             print(f"    Verdict: {claim.verdict.value} | Confidence: {int(claim.confidence_score * 100)}%")
-            print(f"    Adversarial Critique: {claim.red_team_critique}")
+            print(f"    Adversarial Critique: {claim.adversarial_critique}")
+            if claim.fallacy_analysis and claim.fallacy_analysis.detected:
+                print(f"    Fallacy Flagged: {claim.fallacy_analysis.fallacy_type.value}")
             print(f"    Evidence Sources: {len(claim.corroborating_evidence)} corroborating, {len(claim.contradicting_evidence)} contradicting")
             for ev in claim.corroborating_evidence:
                 print(f"      - [{ev.source_type.value}] {ev.title} (Trust: {int(ev.credibility_score * 100)}%)")
+                print(f"        URL: {ev.url}")
+            for ev in claim.contradicting_evidence:
+                print(f"      - [CONTRADICTION] {ev.title} (Trust: {int(ev.credibility_score * 100)}%)")
                 print(f"        URL: {ev.url}")
             print()
 

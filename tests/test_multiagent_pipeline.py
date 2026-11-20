@@ -9,17 +9,18 @@ from src.core.performance import PerformanceMonitor
 from src.models.schemas import VerdictType, AtomicClaim, FallacyType, ExecutionMode
 
 
-class TestVeriFactMultiAgentPipeline(unittest.TestCase):
+class TestVeriFactPS03Pipeline(unittest.TestCase):
     """
-    Industry-Grade Automated Test Suite for PS03: Multi-Agent Research & Fact-Checking.
+    Automated Verification Test Suite for PS03: Multi-Agent Research & Fact-Checking.
     Rigorous coverage across all core criteria:
       1. Lead Planner Agent (Deconstruction, temporal anchors, entity extraction)
-      2. Evidence Hub Agent (Domain trust scoring, primary registries)
-      3. Red Team Verifier (7 informal logical fallacies, disinformation tropes)
+      2. Evidence Hub Agent (Domain trust scoring, primary registries, live queries)
+      3. Red Team Verifier (7 informal logical fallacies, death hoaxes, disinformation)
       4. Synthesizer Agent (Bayesian confidence synthesis, dossier formatting)
       5. Execution Modes (Pipeline, Planner-Only, Evidence-Only, RedTeam-Only)
       6. Security Mitigation (XSS, script injection, length truncation)
       7. High-Performance Caching & Telemetry Tracking
+      8. Vital Status & Celebrity Death Rumor Interception (Elon Musk, Modi, etc.)
     """
 
     def setUp(self):
@@ -83,6 +84,35 @@ class TestVeriFactMultiAgentPipeline(unittest.TestCase):
         self.assertEqual(result["verdict"], VerdictType.VERIFIED_FALSE)
         self.assertEqual(result["fallacy_analysis"].fallacy_type, FallacyType.CIRCULAR_REASONING)
 
+    def test_redteam_verifier_intercepts_elon_musk_death_rumor(self):
+        """Validates that false death claims regarding living public figures are refuted."""
+        claim = AtomicClaim(
+            claim_id="CLM-004",
+            original_text="Elon Musk has died in a tragic accident today",
+            normalized_claim="Elon Musk has died in a tragic accident today",
+            topic_category="General Knowledge",
+            requires_temporal_context=True,
+            entities=["Elon Musk"]
+        )
+        result = self.redteam.execute((claim, []), {})
+        self.assertEqual(result["verdict"], VerdictType.VERIFIED_FALSE)
+        self.assertGreaterEqual(result["confidence"], 0.95)
+        self.assertIn("Refuted", result["epistemic_certainty"])
+
+    def test_redteam_verifier_intercepts_modi_death_rumor(self):
+        """Validates that false death claims regarding living leaders are refuted."""
+        claim = AtomicClaim(
+            claim_id="CLM-005",
+            original_text="Narendra Modi is dead",
+            normalized_claim="Narendra Modi is dead",
+            topic_category="Governance & Policy",
+            requires_temporal_context=False,
+            entities=["Narendra Modi"]
+        )
+        result = self.redteam.execute((claim, []), {})
+        self.assertEqual(result["verdict"], VerdictType.VERIFIED_FALSE)
+        self.assertGreaterEqual(result["confidence"], 0.95)
+
     def test_orchestrator_end_to_end_truth_flow(self):
         statement = "NASA Apollo 11 landed humans on the Moon in July 1969."
         dossier = self.orchestrator.run(statement, mode=ExecutionMode.PIPELINE)
@@ -99,15 +129,15 @@ class TestVeriFactMultiAgentPipeline(unittest.TestCase):
 
     def test_execution_mode_planner_only(self):
         statement = "NASA Apollo 11 landed on the moon and vaccines save lives."
-        dossier = self.orchestrator.run(statement, mode=ExecutionMode.PLANNER_ONLY)
-        self.assertEqual(dossier.execution_mode, ExecutionMode.PLANNER_ONLY)
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.PLANNER)
+        self.assertEqual(dossier.execution_mode, ExecutionMode.PLANNER)
         self.assertEqual(len(dossier.audit_trail), 1)
         self.assertEqual(dossier.audit_trail[0].agent_name, "LeadPlannerAgent")
 
     def test_execution_mode_evidence_only(self):
         statement = "NASA Apollo 11 landed humans on the Moon in July 1969."
-        dossier = self.orchestrator.run(statement, mode=ExecutionMode.EVIDENCE_ONLY)
-        self.assertEqual(dossier.execution_mode, ExecutionMode.EVIDENCE_ONLY)
+        dossier = self.orchestrator.run(statement, mode=ExecutionMode.EVIDENCE)
+        self.assertEqual(dossier.execution_mode, ExecutionMode.EVIDENCE)
         self.assertTrue(any(len(c.corroborating_evidence) > 0 for c in dossier.detailed_claims))
 
     def test_performance_caching_layer(self):
@@ -115,7 +145,6 @@ class TestVeriFactMultiAgentPipeline(unittest.TestCase):
         dossier1 = self.orchestrator.run(statement)
         self.assertFalse(dossier1.meta.get("cache_hit", False))
 
-        # Second identical execution must be a sub-millisecond cache hit
         dossier2 = self.orchestrator.run(statement)
         self.assertTrue(dossier2.meta.get("cache_hit", False))
 
