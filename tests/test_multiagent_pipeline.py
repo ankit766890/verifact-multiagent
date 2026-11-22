@@ -164,6 +164,34 @@ class TestVeriFactPS03Pipeline(unittest.TestCase):
         cleaned = InputSanitizer.clean_text(long_payload, max_length=1500)
         self.assertLessEqual(len(cleaned), 1500)
 
+    def test_redteam_presidential_misattribution(self):
+        """Validates that historical misattribution of public offices is refuted."""
+        dossier = self.orchestrator.run("Albert Einstein was the 1st president of the USA")
+        self.assertEqual(dossier.overall_verdict, VerdictType.VERIFIED_FALSE)
+        self.assertGreaterEqual(dossier.overall_confidence, 0.95)
+
+    def test_redteam_geographic_capital_contradiction(self):
+        """Validates geographic capital verification and contradiction interception."""
+        dossier_false = self.orchestrator.run("Paris is the capital of Japan")
+        self.assertEqual(dossier_false.overall_verdict, VerdictType.VERIFIED_FALSE)
+
+        dossier_true = self.orchestrator.run("Paris is the capital of France")
+        self.assertEqual(dossier_true.overall_verdict, VerdictType.VERIFIED_TRUE)
+
+    def test_redteam_thermodynamic_physical_constant(self):
+        """Validates physical constants and laws of thermodynamics."""
+        dossier_false = self.orchestrator.run("Water boils at 20 degrees Celsius")
+        self.assertEqual(dossier_false.overall_verdict, VerdictType.VERIFIED_FALSE)
+
+        dossier_true = self.orchestrator.run("Water boils at 100 degrees Celsius")
+        self.assertEqual(dossier_true.overall_verdict, VerdictType.VERIFIED_TRUE)
+
+    def test_orchestrator_unverified_fallback(self):
+        """Validates that arbitrary ungrounded claims are classified as UNVERIFIED rather than blindly verified."""
+        dossier = self.orchestrator.run("An obscure rumor about an unknown individual eating gold")
+        self.assertEqual(dossier.overall_verdict, VerdictType.UNVERIFIED)
+        self.assertLessEqual(dossier.overall_confidence, 0.60)
+
 
 if __name__ == "__main__":
     unittest.main()
