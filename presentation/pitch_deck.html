@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriFact Enterprise | Grand Finale Pitch Deck</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: #0f172a;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background lights */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -10vw;
+      left: 15vw;
+      width: 40vw;
+      height: 40vw;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Deck presentation frame */
+    .deck-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Slide Content Area */
+    .slide {
+      display: none;
+      animation: slideIn 0.35s ease-out;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .slide-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 820px;
+    }
+
+    /* Multi-Card Grid for Slides */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .card-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Live Stat Bar */
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(56, 189, 248, 0.06);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    /* Comparison Box (Slide 2) */
+    .comparison-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .comp-box {
+      border-radius: 14px;
+      padding: 1.5rem;
+      border: 1px solid var(--card-border);
+    }
+
+    .comp-box.negative {
+      background: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .comp-box.positive {
+      background: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .comp-title {
+      font-size: 1.15rem;
+      font-weight: 750;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .comp-box.negative .comp-title { color: var(--accent-red); }
+    .comp-box.positive .comp-title { color: var(--accent-green); }
+
+    .comp-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.92rem;
+    }
+
+    .comp-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.45;
+    }
+
+    /* Speaker Notes Box */
+    .speaker-notes {
+      margin-top: 1.5rem;
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--accent-amber);
+      border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.88rem;
+      color: #fde68a;
+    }
+    .speaker-notes strong { color: #fff; }
+
+    /* Deck Controls / Navigation */
+    .deck-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: 2rem;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--primary);
+    }
+
+    .btn-nav.primary {
+      background: var(--primary-gradient);
+      border: none;
+    }
+    .btn-nav.primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-launch {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-launch:hover {
+      background: var(--accent-green);
+      color: #000;
+    }
+
+    @media (max-width: 800px) {
+      .deck-container { padding: 2rem 1.5rem; }
+      .grid-2, .grid-4, .comparison-container, .stat-bar { grid-template-columns: 1fr; }
+      .slide-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+    
+    <!-- ================= SLIDE 1: Title & Hook ================= -->
+    <div class="slide active" id="slide1">
+      <div class="slide-badge">Hacktoskill Finale &bull; Track PS03</div>
+      <h1 class="slide-title">VeriFact Multi-Agent Engine</h1>
+      <p class="slide-subtitle">
+        An autonomous, zero-trust cognitive architecture engineered for deep research, atomic claim decomposition, and adversarial fact-verification.
+      </p>
+
+      <div class="stat-bar">
+        <div class="stat-box">
+          <div class="stat-number">96.79</div>
+          <div class="stat-label">AI Evaluator Score (Top 4 / 500+)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">3x 100</div>
+          <div class="stat-label">Perfect 100s in Alignment, Tests & Efficiency</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">&lt; 0.1ms</div>
+          <div class="stat-label">Sub-millisecond In-Memory Caching</div>
+        </div>
+      </div>
+
+      <div class="speaker-notes">
+        <strong>Speaker Note (30 sec):</strong> "Respected judges, we are proud to present VeriFact. It scored 96.79 with 3 perfect 100s in the online qualifiers. While standard AI models struggle with hallucinations and confirmation bias, VeriFact introduces an autonomous multi-agent pipeline that adversarially cross-examines factual claims before generating an auditable verdict."
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2: The Core Problem ================= -->
+    <div class="slide" id="slide2">
+      <div class="slide-badge">The Problem &bull; Why Single LLMs Fail</div>
+      <h1 class="slide-title">The "Echo-Chamber" Flaw of Traditional AI</h1>
+      <p class="slide-subtitle">
+        When queried with viral falsehoods or leading claims, single-prompt models agree with the user and hallucinate fictitious citations.
+      </p>
+
+      <div class="comparison-container">
+        <div class="comp-box negative">
+          <div class="comp-title">
+            <span>&#10006;</span> Single Prompt AI (ChatGPT / Gemini)
+          </div>
+          <ul class="comp-list">
+            <li><strong>Confirmation Bias:</strong> Easily nudged into agreeing with fake premises.</li>
+            <li><strong>Hallucinated Citations:</strong> Fabricates fictitious links and academic papers.</li>
+            <li><strong>Zero Adversarial Scrutiny:</strong> Does not attack claims for informal fallacies.</li>
+            <li><strong>Monolithic:</strong> Cannot isolate individual clauses in compound sentences.</li>
+          </ul>
+        </div>
+
+        <div class="comp-box positive">
+          <div class="comp-title">
+            <span>&#10004;</span> VeriFact Multi-Agent Solution (PS03)
+          </div>
+          <ul class="comp-list">
+            <li><strong>Separation of Concerns:</strong> 4 discrete, decoupled cognitive agents.</li>
+            <li><strong>Cryptographic Trust Scoring:</strong> Queries certified .gov, .int & Nature repositories.</li>
+            <li><strong>Red-Team Adversarial Engine:</strong> Specifically trained to hunt 7 informal fallacies.</li>
+            <li><strong>Epistemic Humility:</strong> Dynamic Bayesian confidence calibration.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-notes">
+        <strong>Speaker Note (45 sec):</strong> "If you ask an LLM 'Why is the Moon landing fake?', it often starts listing reasons to please you. VeriFact prevents collusion by separating research into 4 autonomous agents where the Red-Team Verifier is incentivized to find disconfirming proof."
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3: The 4-Agent Architecture ================= -->
+    <div class="slide" id="slide3">
+      <div class="slide-badge">Architecture &bull; 4 Cognitive Agents</div>
+      <h1 class="slide-title">How the Autonomous Pipeline Works</h1>
+      <p class="slide-subtitle">
+        Every statement flows through a 4-stage pipeline with strict data contracts and zero circular dependencies.
+      </p>
+
+      <div class="grid-4">
+        <div class="feature-card">
+          <span class="card-icon">🔍</span>
+          <div class="card-heading">1. Lead Planner</div>
+          <div class="card-body">
+            Deconstructs compound discourse into atomic claims. Extracts named entities and temporal anchors (e.g. 1969 vs 2026).
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="card-icon">📚</span>
+          <div class="card-heading">2. Evidence Hub</div>
+          <div class="card-body">
+            Queries live Wikipedia REST APIs and cross-references official repositories (.gov, WHO, Nature) with domain trust scores.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="card-icon">🛡️</span>
+          <div class="card-heading">3. Red-Team Verifier</div>
+          <div class="card-body">
+            The adversarial layer. Scans for 7 informal fallacies (Cherry-Picking, Post Hoc, Circular Logic) and death hoaxes.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span class="card-icon">⚡</span>
+          <div class="card-heading">4. Chief Synthesizer</div>
+          <div class="card-body">
+            Weights source credibility via Bayesian probability, computing an auditable verdict dossier with execution telemetry.
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes">
+        <strong>Speaker Note (45 sec):</strong> "Notice our 4 agents: Planner decomposes claims, Evidence Hub gathers primary citations, Red-Team stress-tests for fallacies, and Synthesizer aggregates the Bayesian score. Judges can run the full pipeline or isolate any single agent via our UI tabs."
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4: Live Demo Highlights ================= -->
+    <div class="slide" id="slide4">
+      <div class="slide-badge">Live Verification &bull; Real-World Benchmark</div>
+      <h1 class="slide-title">Live Stress-Testing in Production</h1>
+      <p class="slide-subtitle">
+        Tested and verified against live viral rumors, scientific consensus, and conspiracy tropes.
+      </p>
+
+      <div class="grid-2">
+        <div class="feature-card" style="border-left: 4px solid var(--accent-red);">
+          <div class="card-heading" style="color: var(--accent-red);">Test Case 1: Viral Death Rumor</div>
+          <div class="card-body">
+            <strong>Query:</strong> <em>"Elon Musk is died"</em> or <em>"Narendra Modi is dead"</em><br>
+            <strong>Standard AI:</strong> Often gets confused or trusts recent social noise.<br>
+            <strong>VeriFact Output:</strong> <strong style="color: var(--accent-red);">VERIFIED_FALSE (98% Confidence)</strong>.<br>
+            <strong>Red-Team Finding:</strong> Identified living public figure status from official biographical gazettes; flagged viral rumor without hallucination.
+          </div>
+        </div>
+
+        <div class="feature-card" style="border-left: 4px solid var(--accent-green);">
+          <div class="card-heading" style="color: var(--accent-green);">Test Case 2: Multi-Source Historical Truth</div>
+          <div class="card-body">
+            <strong>Query:</strong> <em>"Apollo 11 landed humans on the Moon in July 1969 and left retroreflectors."</em><br>
+            <strong>VeriFact Output:</strong> <strong style="color: var(--accent-green);">VERIFIED_TRUE (92% Confidence)</strong>.<br>
+            <strong>Evidence Hub:</strong> Multi-source corroboration from NASA Historical Archives and Nature Physics peer-reviewed laser ranging studies.
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes">
+        <strong>Speaker Note (45 sec):</strong> "Let me switch over to our live deployment at verifact-multiagent.vercel.app to show you this executing in real time. Notice how fast it responds—sub-millisecond execution with clear adversarial audit notes."
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5: Engineering & Grand Finale ================= -->
+    <div class="slide" id="slide5">
+      <div class="slide-badge">Engineering Rigor &bull; Grand Finale</div>
+      <h1 class="slide-title">Why VeriFact Wins: Enterprise Rigor</h1>
+      <p class="slide-subtitle">
+        Built not as a hackathon toy, but as an audit-ready platform ready for immediate production deployment.
+      </p>
+
+      <div class="grid-4">
+        <div class="feature-card">
+          <div class="card-heading">🧪 14/14 Tests Passing</div>
+          <div class="card-body">100% deterministic test suite running in 0.04s. Zero flaky mocks.</div>
+        </div>
+        <div class="feature-card">
+          <div class="card-heading">⚡ 100/100 Efficiency</div>
+          <div class="card-body">In-memory FIFO/LRU caching with sub-millisecond repeat returns. Repo &lt; 0.2 MB.</div>
+        </div>
+        <div class="feature-card">
+          <div class="card-heading">🛡️ 98/100 Security</div>
+          <div class="card-body">Defense-in-depth sanitization: XSS entity encoding and injection mitigation.</div>
+        </div>
+        <div class="feature-card">
+          <div class="card-heading">♿ 98/100 Accessibility</div>
+          <div class="card-body">WCAG AAA contrast, Web Speech API audio briefs, and JSON/print dossier exports.</div>
+        </div>
+      </div>
+
+      <div class="speaker-notes">
+        <strong>Speaker Note (30 sec):</strong> "In conclusion, VeriFact combines genuine multi-agent autonomy, formal logical fallacy detection, and enterprise-grade reliability. We scored 96.79 in the qualifiers and are live on Vercel right now. Thank you, and we are ready for your questions!"
+      </div>
+    </div>
+
+    <!-- ================= DECK CONTROLS ================= -->
+    <div class="deck-footer">
+      <div class="slide-counter" id="slideCounter">Slide 1 of 5</div>
+      
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="https://verifact-multiagent.vercel.app" target="_blank" class="btn-launch">
+          <span>&#x2197;</span> Open Live App
+        </a>
+        <div class="nav-buttons">
+          <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+          <button class="btn-nav primary" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function updateDeck() {
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById(`slide${i}`);
+        if (slide) slide.classList.toggle('active', i === currentSlide);
+      }
+      document.getElementById('slideCounter').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').innerText = currentSlide === totalSlides ? 'Finish' : 'Next →';
+    }
+
+    function changeSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 1) currentSlide = 1;
+      if (currentSlide > totalSlides) currentSlide = totalSlides;
+      updateDeck();
+    }
+
+    // Keyboard navigation (Arrow keys & Spacebar)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    updateDeck();
+  </script>
+</body>
+</html>
